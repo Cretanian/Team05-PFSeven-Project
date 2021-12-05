@@ -1,11 +1,9 @@
 package com.pfseven.eshop.servicies;
 
-import com.pfseven.eshop.Main;
 import com.pfseven.eshop.models.CategoryID;
 import com.pfseven.eshop.models.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.Scanner;
 
 public class CustomerService {
@@ -23,13 +21,13 @@ public class CustomerService {
         do {
             logger.info("Enter user Category ID: one of the following B2B, B2C, B2G ");
             String string = in.nextLine();
-            if (string.equals("B2B")){
+            if (string.equals("B2B")||string.equals("b2b")){
                 customer.setCategoryID(CategoryID.B2B);
                 break;
-            }else if(string.equals("B2C")){
+            }else if(string.equals("B2C")||string.equals("b2c")){
                 customer.setCategoryID(CategoryID.B2C);
                 break;
-            }else if(string.equals("B2G")){
+            }else if(string.equals("B2G")||string.equals("b2g")){
                 customer.setCategoryID(CategoryID.B2G);
                 break;
             }

@@ -1,6 +1,5 @@
 package com.pfseven.eshop.models;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +9,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Data
 //@ToString(callSuper = false)
+
 public class Customer {
     private Integer customerID;
     private String firstName;
