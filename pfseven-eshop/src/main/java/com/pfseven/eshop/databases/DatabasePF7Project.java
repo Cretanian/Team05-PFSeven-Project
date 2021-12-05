@@ -13,9 +13,9 @@ public class DatabasePF7Project {
 
    private static final Logger logger = LoggerFactory.getLogger(DatabasePF7Project.class);
 
-   private static final String DB_CONNECTION_URL_MEMORY_MODE = "jdbc:h2:mem:databaseTest";
+   private static final String DB_CONNECTION_URL_FILE_MODE = "jdbc:h2:file:./databasePF7Shop";
    private static final String DB_USERNAME = "admin";
-   private static final String DB_PASSWORD = "123";
+   private static final String DB_PASSWORD = "admin123";
 
    private static Server server;
 
@@ -28,7 +28,7 @@ public class DatabasePF7Project {
       org.h2.Driver.load();
       logger.info("H2 JDBC driver server has been successfully loaded.");
 
-      Connection connect = DriverManager.getConnection(DB_CONNECTION_URL_MEMORY_MODE, DB_USERNAME, DB_PASSWORD);
+      Connection connect = DriverManager.getConnection(DB_CONNECTION_URL_FILE_MODE, DB_USERNAME, DB_PASSWORD);
       Statement statement = connect.createStatement();
 
       String sql = "CREATE TABLE Category (" +
@@ -60,7 +60,8 @@ public class DatabasePF7Project {
               " CREATE TABLE Orders (" +
               " order_ID INTEGER not NULL AUTO_INCREMENT," +
               " customer_ID INTEGER not NULL," +
-              " payment_method_id INTEGER not NULL, " +
+              " payment_method_id INTEGER not NULL," +
+              " pending varchar(5)," +
               " PRIMARY KEY (order_ID)," +
               " CONSTRAINT FK_CUSTOMER FOREIGN KEY(customer_ID) REFERENCES Customer(customer_ID)" +
               " ON DELETE NO ACTION ON UPDATE NO ACTION," +
@@ -80,20 +81,46 @@ public class DatabasePF7Project {
 
       int databaseCreation = statement.executeUpdate(sql);
 
+      sql = "INSERT INTO CATEGORY (CATEGORY_ID, CATEGORYNAME) Values (NULL,'B2C'), (NULL,'B2B') , (NULL, 'B2G');" +
+                   "INSERT INTO PAYMENTMETHOD (PAYMENT_METHOD_ID, PAYMENT_METHOD) VALUES (NULL,'Wire Transfer'), (NULL,'Credit Card')," +
+                   "(NULL,'Cash');";
+
+      databaseCreation = statement.executeUpdate(sql);
+
+      sql = "INSERT INTO CUSTOMER (CUSTOMER_ID, FIRST_NAME, LAST_NAME, CATEGORY_ID)" +
+              "VALUES (NULL, 'John', 'Johnathan', 2), (NULL, 'Jennifer', 'Tarin', 1), (NULL, 'Alissa', 'Alisson', 1), " +
+              "(NULL, 'Lionel', 'Messi', 3);" +
+              "INSERT INTO PRODUCT (PRODUCT_ID, PRODUCTNAME, PRICE, STOCK)" +
+              "VALUES (NULL, 'Mouse', 35.25, 8), (NULL, 'Monitor', 200.80, 3), (NULL, 'Keyboard', 52, 4)," +
+              "(NULL, 'XBOX Controller', 40.50, 2), (NULL, 'Laptop', 1200, 1), (NULL, 'PC', 2650, 2)," +
+              "(NULL, 'PS5', 500, 0), (NULL, 'Speakers', 30, 23), (NULL, 'Mousepad', 20, 45)," +
+              "(NULL, 'iPhone', 800, 3), (NULL, 'Samsung Galaxy', 801, 5), (NULL, 'Headphones', 80, 12)," +
+              "(NULL, 'Ethernet Cable 2m', 3, 120), (NULL, 'HP Switch', 500, 6), (NULL, 'Router', 25.35, 12)," +
+              "(NULL, 'GPU 1080Ti', 3500, 2), (NULL, 'RAM 8GB', 60, 5), (NULL, 'CPU i710k', 550.99, 8)," +
+              "(NULL, 'Camera', 35.2, 200), (NULL, 'Optical Cable', 25, 20), (NULL, 'VR', 250, 7)," +
+              "(NULL, 'HP Replicator', 100, 10), (NULL, 'iPhone Charger', 30, 4), (NULL, 'Air Pods', 160.80, 3);";
+
+      databaseCreation = statement.executeUpdate(sql);
+
+       sql = "INSERT INTO ORDERS (ORDER_ID, CUSTOMER_ID, PAYMENT_METHOD_ID, PENDING)" +
+              "VALUES (NULL, '2', '2', 'NO'), (NULL, '2', '3', 'NO'), (NULL, '2', '1', 'YES'), " +
+              "(NULL, '3', '2', 'NO'), (NULL, '3', '1', 'YES'), (NULL, '1', '3', 'NO')," +
+              "(NULL, '1', '1', 'NO'), (NULL, '1', '2', 'NO'), (NULL, '1', '3', 'YES');";
+
+      databaseCreation = statement.executeUpdate(sql);
+
+      sql = "INSERT INTO PRODUCTORDER (ORDER_ID, PRODUCT_ID, QUANTITY)" +
+              "VALUES (1, 5, 1), (2, 2, 2), (2, 12, 3)," +
+              "(3, 24, 2), (3, 22, 5), (3, 20, 7)," +
+              "(4, 9, 25), (5, 23, 2), (5, 19, 50)," +
+              "(6, 6, 1), (7, 21, 3), (7, 1, 3)," +
+              "(7,16,1), (7, 14, 1), (8, 22, 2)," +
+              "(8, 12, 5), (8, 20, 18), (9, 10, 2);";
+
+      databaseCreation = statement.executeUpdate(sql);
+
       logger.info("Create tables was successful with productTable {}.", databaseCreation);
 
-//      sql = "INSERT INTO Product VALUES (NULL,'Keyboard',20,5)";
-//
-//      int productRows = statement.executeUpdate(sql);
-//      logger.info("Update table Product was successful with {} row(s) affected.", productRows);
-//
-//      sql = "INSERT INTO Category VALUES (NULL,'TestCategory')";
-//
-//      productRows = statement.executeUpdate(sql);
-//      logger.info("Update table Product was successful with {} row(s) affected.", productRows);
-//
-//      sql = "SELECT * FROM Product,Category";
-//
 //      ResultSet productData = statement.executeQuery(sql);
 //      while (productData.next()) {
 //         logger.info("Category_ID: {}, Category Name: {}",
