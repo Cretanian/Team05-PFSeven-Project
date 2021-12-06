@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class CustomerService {
     private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
-    public void customerSomething(){
+    public void newCustomerInput(){
         Customer customer = new Customer();
 
         Scanner in = new Scanner(System.in);
