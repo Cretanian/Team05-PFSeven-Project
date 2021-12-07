@@ -82,7 +82,7 @@ public class Main {
         String userInput = "";
         Integer customerID = -1;
         CustomerService customerService = new CustomerService();
-        while (!userInput.equals("C")) {
+        while (customerID == -1) {
             logger.info("Select customer:");
             logger.info("A) Add new customer  B) Get existing customer C) Kill me plz");
             userInput = scannerInput.nextLine();
@@ -95,6 +95,7 @@ public class Main {
                     break;
                 case "C":
                     logger.info("Thank you kind sir!");
+                    customerID = -2;
                     break;
                 default:
                     logger.info("Wrong input.. Try again..");
@@ -104,10 +105,15 @@ public class Main {
     }
 
     private static void placeOrder(){
+
         Order newOrder = new Order();
         OrderService orderService = new OrderService();
-        newOrder.setCustomerID(getCustomerID());
-        orderService.newOrderInput(newOrder);
+        Integer customerID = getCustomerID();
+
+        if (customerID != -2) {
+            newOrder.setCustomerID(customerID);
+            orderService.newOrderInput(newOrder);
+        }
     }
 
 }

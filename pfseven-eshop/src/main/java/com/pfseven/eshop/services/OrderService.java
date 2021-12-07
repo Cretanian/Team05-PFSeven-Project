@@ -41,7 +41,7 @@ public class OrderService {
 
             logger.info("Choose how many you want ");
             totalProduct = scannerInput.nextInt();
-
+            scannerInput.nextLine();
 //            if(totalProduct <= ){
 //                //change stock - total and update DB
 //                orderItem.setTotal(totalProduct);
