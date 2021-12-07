@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class DatabasePF7Project {
 
@@ -16,7 +17,7 @@ public class DatabasePF7Project {
 
    private static final Logger logger = LoggerFactory.getLogger(DatabasePF7Project.class);
 
-   private static final String DB_CONNECTION_URL_FILE_MODE = "jdbc:h2:file:./databasePF7Shop";
+   private static final String DB_CONNECTION_URL_FILE_MODE = "jdbc:h2:C:/Users/spyro/IdeaProjects/Team05-PFSeven-Project/databasePF7Shop";
    private static final String DB_USERNAME = "admin";
    private static final String DB_PASSWORD = "admin123";
 
@@ -28,35 +29,72 @@ public class DatabasePF7Project {
       server.start();
       logger.info("H2 server has started with status '{}'.", server.getStatus());
 
-      Driver.load();
+      org.h2.Driver.load();
+
       logger.info("H2 JDBC driver server has been successfully loaded.");
 
       Connection connect = DriverManager.getConnection(DB_CONNECTION_URL_FILE_MODE, DB_USERNAME, DB_PASSWORD);
 
+     // Product product = new Product();
+
+      Scanner sc = new Scanner(System.in);
+
+      logger.info("Enter Product Name {} :");
+
+      String a = sc.nextLine();
+
+      logger.info("Enter Product Price {}:");
+
+      int b = sc.nextInt();
+
+      logger.info("Enter Product Stock {}:");
+
+      int c = sc.nextInt();
+
+      //Statement statement = connect.createStatement();
+      PreparedStatement statement = connect.prepareStatement("INSERT INTO PRODUCT(PRODUCT_ID,PRODUCTNAME,PRICE,STOCK) VALUES (NULL,?,?,?)");
+
+      statement.setString(1, a);
+      statement.setInt(2, b);
+      statement.setInt(3, c);
+      statement.executeUpdate();
+
+      //String sql = "INSERT INTO PRODUCT(PRODUCT_ID,PRODUCTNAME,PRICE,STOCK) VALUES (NULL,'"+a+"','"+b+"','"+c+"');";
+
+      System.out.println(statement);
+
+
+
+//      String sql = "SELECT * FROM PRODUCT";
+
+      //int insertProduct = statement.executeUpdate(sql);
+
+      //logger.info("Record {} successfully inserted.", insertProduct);
+
       //Customer customer = new Customer();
 
-      Statement statement = connect.createStatement();
-
-      String sql = "SELECT * FROM PRODUCT";
-
-      ResultSet databaseCreation = statement.executeQuery(sql);
-
-      Product product = new Product();
-
-      while(databaseCreation.next())
-      {
-         if(databaseCreation.getString("ProductName").equals("VR")) {
-            product.setStock(databaseCreation.getInt("stock"));
-
-            logger.info("test {}", product.getStock());
-
-            logger.info("Product_ID: {}, ProductName:{}, price:{}, stock:{}",
-                    databaseCreation.getInt("Product_ID"),
-                    databaseCreation.getString("ProductName"),
-                    databaseCreation.getString("price"),
-                    databaseCreation.getInt("stock"));
-         }
-      }
+//      Statement statement = connect.createStatement();
+//
+//      String sql = "SELECT * FROM PRODUCT";
+//
+//      ResultSet databaseCreation = statement.executeQuery(sql);
+//
+//      Product product = new Product();
+//
+//      while(databaseCreation.next())
+//      {
+//         if(databaseCreation.getString("ProductName").equals("VR")) {
+//            product.setStock(databaseCreation.getInt("stock"));
+//
+//            logger.info("test {}", product.getStock());
+//
+//            logger.info("Product_ID: {}, ProductName:{}, price:{}, stock:{}",
+//                    databaseCreation.getInt("Product_ID"),
+//                    databaseCreation.getString("ProductName"),
+//                    databaseCreation.getString("price"),
+//                    databaseCreation.getInt("stock"));
+//         }
+//      }
 
 
 
