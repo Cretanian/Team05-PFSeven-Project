@@ -4,9 +4,11 @@ import java.sql.SQLException;
 
 public interface ProductServiceInterface {
 
-    /* ADD here explanation*/
-     void newProductInput() throws SQLException;
+    /* This method creates a new product
+        and then add this product to the database.*/
+    void newProductInput() throws SQLException;
 
-    /* ADD here explanation*/
-     void editProduct() throws SQLException;
+    /* This method edits an existing product
+     and then updates this product to the database.*/
+    void editProduct() throws SQLException;
 }
