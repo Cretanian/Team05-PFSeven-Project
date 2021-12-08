@@ -42,7 +42,8 @@ public class CustomerService implements CustomerServiceInterface {
 
         logger.info("Customer name {} {} , with categoryID {}", customer.getFirstName(), customer.getLastName(), customer.getCategoryID());
 
-        //add to customer to db
+        //add customer to db
+//        insertNewCustomer(customer);
         //get max CustomerID save it into customerID
 
         return customerID;

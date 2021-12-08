@@ -1,8 +1,11 @@
 package com.pfseven.eshop;
 
+import com.pfseven.eshop.database.CustomerRepository;
 import com.pfseven.eshop.database.DatabasePF7Project;
 import com.pfseven.eshop.database.OrderRepository;
 import com.pfseven.eshop.database.ProductRepository;
+import com.pfseven.eshop.model.CategoryID;
+import com.pfseven.eshop.model.Customer;
 import com.pfseven.eshop.model.Order;
 import com.pfseven.eshop.service.*;
 
@@ -31,6 +34,18 @@ public class Main {
        // newOrderInput.newOrderInput();
        // productService.newProductInput();
 
+        //testing method insertNewCustomer
+
+        Customer newCustomer = new Customer();
+
+        newCustomer.setFirstName("stathis");
+        newCustomer.setLastName("antonakis");
+        newCustomer.setCategoryID(CategoryID.B2B);
+
+        CustomerRepository tester = new CustomerRepository(controller);
+        tester.insertNewCustomer(newCustomer);
+
+        //end of testing
 
         logger.info("Hello admin! Select action:");
         String userInput = "";
