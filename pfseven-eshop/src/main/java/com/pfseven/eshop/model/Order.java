@@ -1,11 +1,9 @@
-package com.pfseven.eshop.models;
+package com.pfseven.eshop.model;
 
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor

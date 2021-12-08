@@ -1,9 +1,8 @@
-package com.pfseven.eshop.models;
+package com.pfseven.eshop.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor

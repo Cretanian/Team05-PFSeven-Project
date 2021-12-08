@@ -1,8 +1,8 @@
-package com.pfseven.eshop.services;
+package com.pfseven.eshop.service;
 
-import com.pfseven.eshop.interfaces.CustomerServiceInterface;
-import com.pfseven.eshop.models.CategoryID;
-import com.pfseven.eshop.models.Customer;
+import com.pfseven.eshop.classinterface.CustomerServiceInterface;
+import com.pfseven.eshop.model.CategoryID;
+import com.pfseven.eshop.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;

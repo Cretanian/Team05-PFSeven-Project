@@ -1,6 +1,6 @@
-package com.pfseven.eshop.interfaces;
+package com.pfseven.eshop.classinterface;
 
-import com.pfseven.eshop.models.Order;
+import com.pfseven.eshop.model.Order;
 
 public interface OrderServiceInterface {
 

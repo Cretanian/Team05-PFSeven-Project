@@ -1,13 +1,11 @@
-package com.pfseven.eshop.services;
+package com.pfseven.eshop.service;
 
-import com.pfseven.eshop.interfaces.OrderServiceInterface;
-import com.pfseven.eshop.models.OrderItem;
-import com.pfseven.eshop.models.Order;
-import com.pfseven.eshop.models.Product;
+import com.pfseven.eshop.classinterface.OrderServiceInterface;
+import com.pfseven.eshop.model.OrderItem;
+import com.pfseven.eshop.model.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 

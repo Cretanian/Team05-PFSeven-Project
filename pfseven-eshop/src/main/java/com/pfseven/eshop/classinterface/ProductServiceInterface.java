@@ -1,4 +1,4 @@
-package com.pfseven.eshop.interfaces;
+package com.pfseven.eshop.classinterface;
 
 public interface ProductServiceInterface {
 
