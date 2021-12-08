@@ -2,18 +2,16 @@ package com.pfseven.eshop.database;
 
 import com.pfseven.eshop.model.CategoryID;
 import com.pfseven.eshop.model.Customer;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class CustomerRepository {
 
-    private DatabasePF7Project dataBaseRef;
+    private Connection connection;
 
 
-    public CustomerRepository(DatabasePF7Project dataBaseRef){
-        this.dataBaseRef = dataBaseRef;
+
+    public CustomerRepository(Connection connection){
+        this.connection = connection;
     }
 
     public int convertCategoryIDtoInt(CategoryID id) {
@@ -45,7 +43,7 @@ public class CustomerRepository {
 
 
     public void insertNewCustomer (Customer newCustomer) throws SQLException {
-        PreparedStatement statement = this.dataBaseRef.getDBConnection().prepareStatement("INSERT INTO CUSTOMER(CUSTOMER_ID,FIRST_NAME,LAST_NAME,CATEGORY_ID) VALUES(NULL,?,?,?)");
+        PreparedStatement statement = this.connection.prepareStatement("INSERT INTO CUSTOMER(CUSTOMER_ID,FIRST_NAME,LAST_NAME,CATEGORY_ID) VALUES(NULL,?,?,?)");
         statement.setString(1, newCustomer.getFirstName());
         statement.setString(2, newCustomer.getLastName());
         int categoryID = convertCategoryIDtoInt(newCustomer.getCategoryID());
@@ -56,9 +54,10 @@ public class CustomerRepository {
     public Customer getCustomerFromID(int customerID) throws SQLException {
         Customer existedCustomer = new Customer();
 
-        PreparedStatement statement = this.dataBaseRef.getDBConnection().prepareStatement("SELECT * FROM CUSTOMER WHERE(CUSTOMER_ID = ?)");
+        PreparedStatement statement = this.connection.prepareStatement("SELECT * FROM CUSTOMER WHERE(CUSTOMER_ID = ?)");
         statement.setString(1, String.valueOf(customerID));
         ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
 
         existedCustomer.setFirstName(resultSet.getString("first_name"));
         existedCustomer.setLastName(resultSet.getString("last_name"));
@@ -74,10 +73,11 @@ public class CustomerRepository {
     public Customer getCustomerFromName(String firstName, String lastName) throws SQLException {
         Customer existedCustomer = new Customer();
 
-        PreparedStatement statement = this.dataBaseRef.getDBConnection().prepareStatement("SELECT * FROM CUSTOMER WHERE(FIRST_NAME = ? && LAST_NAME = ?)");
+        PreparedStatement statement = this.connection.prepareStatement("SELECT * FROM CUSTOMER WHERE(FIRST_NAME = ? AND LAST_NAME = ?)");
         statement.setString(1, String.valueOf(firstName));
         statement.setString(2, String.valueOf(lastName));
         ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
 
         existedCustomer.setFirstName(resultSet.getString("first_name"));
         existedCustomer.setLastName(resultSet.getString("last_name"));
@@ -86,8 +86,20 @@ public class CustomerRepository {
         CategoryID categoryID = convertIntToCategoryID(resultSet.getInt("category_id"));
         existedCustomer.setCategoryID(categoryID);
 
+        System.out.println("customer's id is " + existedCustomer.getCustomerID());
+
         return existedCustomer;
 
+    }
+
+    public int findMaxID() throws SQLException {
+        PreparedStatement statement = this.connection.prepareStatement("SELECT MAX(CUSTOMER_ID) FROM CUSTOMER");
+        ResultSet resultSet = statement.executeQuery();
+
+        resultSet.next();
+        int id = resultSet.getInt(1);
+
+        return id;
     }
 
 

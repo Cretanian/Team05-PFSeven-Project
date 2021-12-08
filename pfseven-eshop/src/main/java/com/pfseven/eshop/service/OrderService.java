@@ -1,25 +1,31 @@
 package com.pfseven.eshop.service;
 
 import com.pfseven.eshop.classinterface.OrderServiceInterface;
+import com.pfseven.eshop.database.CustomerRepository;
 import com.pfseven.eshop.database.OrderRepository;
 import com.pfseven.eshop.database.ProductRepository;
 import com.pfseven.eshop.model.OrderItem;
 import com.pfseven.eshop.model.Order;
 import com.pfseven.eshop.model.Product;
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+@Data
 
 public class OrderService implements OrderServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
     private OrderRepository orderRepository ;
     private ProductRepository productRepository;
-    public  OrderService(OrderRepository orderRepository,ProductRepository productRepository){
+    private CustomerRepository customerRepository;
+
+    public  OrderService(OrderRepository orderRepository,ProductRepository productRepository, CustomerRepository customerRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
+        this.customerRepository = customerRepository;
     }
 
     public void newOrderInput(Order newOrder) throws SQLException {
@@ -50,7 +56,7 @@ public class OrderService implements OrderServiceInterface {
                 logger.info("Enter product name");
                 String productName = scannerInput.nextLine();
                 //get rest from DB
-                product  = productRepository.getProductFromName(orderItem.getProductName());
+                product  = productRepository.getProductFromName(product.getProductName());
             }
 
             logger.info("Choose how many you want ");

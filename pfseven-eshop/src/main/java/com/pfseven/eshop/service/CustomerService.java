@@ -1,16 +1,25 @@
 package com.pfseven.eshop.service;
 
 import com.pfseven.eshop.classinterface.CustomerServiceInterface;
+import com.pfseven.eshop.database.CustomerRepository;
+import com.pfseven.eshop.database.ProductRepository;
 import com.pfseven.eshop.model.CategoryID;
 import com.pfseven.eshop.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class CustomerService implements CustomerServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
+    private CustomerRepository customerRepository;
 
-    public Integer newCustomerInput(){
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    public Integer newCustomerInput() throws SQLException {
         Customer customer = new Customer();
         Scanner in = new Scanner(System.in);
         Integer customerID = -1;
@@ -43,13 +52,14 @@ public class CustomerService implements CustomerServiceInterface {
         logger.info("Customer name {} {} , with categoryID {}", customer.getFirstName(), customer.getLastName(), customer.getCategoryID());
 
         //add customer to db
-//        insertNewCustomer(customer);
+        customerRepository.insertNewCustomer(customer);
         //get max CustomerID save it into customerID
+        customerID = customerRepository.findMaxID();
 
         return customerID;
     }
 
-    public Integer getCustomerIDfromDB(){
+    public Integer getCustomerIDfromDB() throws SQLException {
         Integer customerID = -1;
         Scanner scannerInput = new Scanner(System.in);
 
@@ -68,6 +78,7 @@ public class CustomerService implements CustomerServiceInterface {
             String userLastname = scannerInput.nextLine();
 
             //request customerID from database
+            customerID = customerRepository.getCustomerFromName(userFirstname, userLastname).getCustomerID();
 
             return customerID;
         }

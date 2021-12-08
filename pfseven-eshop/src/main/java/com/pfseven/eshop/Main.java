@@ -27,23 +27,25 @@ public class Main {
       // controller.closeServer();
         ProductRepository productRepository = new ProductRepository(controller.getDBConnection());
         ProductService productService = new ProductService(productRepository);
-        CustomerService customerService = new CustomerService();
+
+        CustomerRepository customerRepository = new CustomerRepository(controller.getDBConnection());
+        CustomerService customerService = new CustomerService(customerRepository);
        // customerService.newCustomerInput();
         OrderRepository orderRepository = new OrderRepository(controller.getDBConnection());
-        OrderService newOrderInput = new OrderService(orderRepository,productRepository);
+        OrderService newOrderInput = new OrderService(orderRepository, productRepository, customerRepository);
        // newOrderInput.newOrderInput();
        // productService.newProductInput();
 
         //testing method insertNewCustomer
 
-        Customer newCustomer = new Customer();
-
-        newCustomer.setFirstName("stathis");
-        newCustomer.setLastName("antonakis");
-        newCustomer.setCategoryID(CategoryID.B2B);
-
-        CustomerRepository tester = new CustomerRepository(controller);
-        tester.insertNewCustomer(newCustomer);
+//        Customer newCustomer = new Customer();
+//
+//        newCustomer.setFirstName("stathis");
+//        newCustomer.setLastName("antonakis");
+//        newCustomer.setCategoryID(CategoryID.B2B);
+//
+//        CustomerRepository tester = new CustomerRepository(controller);
+//        tester.insertNewCustomer(newCustomer);
 
         //end of testing
 
@@ -58,7 +60,7 @@ public class Main {
             switch (userInput) {
                 case "1":
                     logger.info("Starting order!");
-                    placeOrder(newOrderInput);
+                    placeOrder(newOrderInput,customerService);
                     break;
                 case "2":
                     logger.info("Editing product!");
@@ -104,11 +106,11 @@ public class Main {
         }
     }
 
-    private static Integer getCustomerID(){
+    private static Integer getCustomerID(CustomerService customerService) throws SQLException {
         Scanner scannerInput = new Scanner(System.in);
         String userInput = "";
         Integer customerID = -1;
-        CustomerService customerService = new CustomerService();
+
         while (customerID == -1) {
             logger.info("Select customer:");
             logger.info("A) Add new customer  B) Get existing customer C) Kill me plz");
@@ -131,11 +133,11 @@ public class Main {
         return customerID;
     }
 
-    private static void placeOrder(OrderService orderService) throws SQLException {
+    private static void placeOrder(OrderService orderService, CustomerService customerService) throws SQLException {
 
         Order newOrder = new Order();
 
-        Integer customerID = getCustomerID();
+        Integer customerID = getCustomerID(customerService);
 
         if (customerID != -2) {
             newOrder.setCustomerID(customerID);
