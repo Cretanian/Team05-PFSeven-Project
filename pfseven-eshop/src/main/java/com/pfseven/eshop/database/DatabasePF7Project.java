@@ -14,9 +14,9 @@ public class DatabasePF7Project {
 
    private static final Logger logger = LoggerFactory.getLogger(DatabasePF7Project.class);
 
-  // private static final String DB_CONNECTION_URL_FILE_MODE = "jdbc:h2:C:/Users/spyro/IdeaProjects/Team05-PFSeven-Project/databasePF7Shop";
-  // private static final String DB_USERNAME = "admin";
-  // private static final String DB_PASSWORD = "admin123";
+//   private static final String DB_CONNECTION_URL_FILE_MODE = "jdbc:h2:C:/Users/spyro/IdeaProjects/Team05-PFSeven-Project/databasePF7Shop";
+//   private static final String DB_USERNAME = "admin";
+//   private static final String DB_PASSWORD = "admin123";
 
 
    private static final String DB_CONNECTION_URL_MEMORY_MODE = "jdbc:h2:mem:sample";
@@ -43,9 +43,9 @@ public class DatabasePF7Project {
    }
 
    public void createDBConnection() throws SQLException {
-     // this.connection = DriverManager.getConnection(DB_CONNECTION_URL_FILE_MODE, DB_USERNAME, DB_PASSWORD);
-
       this.connection = DriverManager.getConnection(DB_CONNECTION_URL_MEMORY_MODE, DB_USERNAME, DB_PASSWORD);
+
+//      this.connection = DriverManager.getConnection(DB_CONNECTION_URL_FILE_MODE, DB_USERNAME, DB_PASSWORD);
       logger.info("Connection created successfully.");
    }
 

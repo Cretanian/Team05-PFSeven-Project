@@ -13,8 +13,8 @@
 
 		<!-- Rolling Random Access File Appender with a default buffer of 256 * 1024 bytes -->
 		<RollingRandomAccessFile name="RollingRandomAccessFileAppender"
-								 fileName="logs/java-path-core-oop.log"
-								 filePattern="logs/java-path-core-oop-%d{yyyy-MM-dd}.zip">
+								 fileName="logs/Team05-PFSeven-Project.log"
+								 filePattern="logs/Team05-PFSeven-Project-%d{yyyy-MM-dd}.zip">
 			<PatternLayout>
 				<Pattern>${LOG_PATTERN}</Pattern>
 			</PatternLayout>

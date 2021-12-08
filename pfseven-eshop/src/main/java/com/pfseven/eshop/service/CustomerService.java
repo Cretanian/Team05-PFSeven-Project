@@ -70,6 +70,7 @@ public class CustomerService implements CustomerServiceInterface {
             logger.info("Enter ID");
             return scannerInput.nextInt();
         }
+        //It requires else if, because if we do not place "A", it tells you to choose the customer regardless.
         else
         {
             logger.info("Enter first name");

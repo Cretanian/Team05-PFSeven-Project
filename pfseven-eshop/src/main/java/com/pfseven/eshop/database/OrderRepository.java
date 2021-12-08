@@ -8,5 +8,9 @@ public class OrderRepository {
         this.connection = connection;
     }
 
+    public void save() {
+
+    }
+
 }
 

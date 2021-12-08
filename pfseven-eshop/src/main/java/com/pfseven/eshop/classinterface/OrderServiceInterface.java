@@ -7,7 +7,10 @@ import java.sql.SQLException;
 public interface OrderServiceInterface {
 
     /* ADD here explanation*/
-     void newOrderInput(Order newOrder) throws SQLException;
+    void newOrderInput(Order newOrder, int customerID) throws SQLException;
 
+
+
+     //public void save(Order theOrder);
 
 }

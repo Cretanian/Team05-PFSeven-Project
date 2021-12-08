@@ -32,7 +32,7 @@ public class ProductService implements ProductServiceInterface {
         product.setStock(in.nextInt());
         productRepository.insertProductToDb(product);
         //add this product to db
-        this.productRepository.insertProductToDb(product);
+        //this.productRepository.insertProductToDb(product);
         logger.info("New product name: {} , with price {} € and stock {} ", product.getProductName(),product.getPrice(),product.getStock());
     }
 

@@ -22,7 +22,7 @@ public class Main {
        DatabasePF7Project controller = new DatabasePF7Project();
        controller.startServer();
        controller.createDBConnection();
-       controller.initializeDB();
+//       controller.initializeDB();
 
       // controller.closeServer();
         ProductRepository productRepository = new ProductRepository(controller.getDBConnection());
@@ -109,13 +109,14 @@ public class Main {
     private static Integer getCustomerID(CustomerService customerService) throws SQLException {
         Scanner scannerInput = new Scanner(System.in);
         String userInput = "";
+        //Change name of customerID!!
         Integer customerID = -1;
 
         while (customerID == -1) {
             logger.info("Select customer:");
             logger.info("A) Add new customer  B) Get existing customer C) Kill me plz");
             userInput = scannerInput.nextLine();
-            switch (userInput) {                            //check statement later
+            switch (userInput) {
                 case "A":
                     customerID = customerService.newCustomerInput();
                     break;
@@ -139,9 +140,11 @@ public class Main {
 
         Integer customerID = getCustomerID(customerService);
 
+        //if (newOrder.getPending() = )
+
         if (customerID != -2) {
             newOrder.setCustomerID(customerID);
-            orderService.newOrderInput(newOrder);
+            orderService.newOrderInput(newOrder,customerID);
         }
     }
 

@@ -10,9 +10,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 //@ToString(callSuper = false)
-public class OrderItem {
+public class OrderItem{
     private Integer productID;
-    private BigDecimal totalEntityPrice;
+    private Integer orderID;
+//    private BigDecimal totalEntityPrice;
     private Integer total;
 
 }
