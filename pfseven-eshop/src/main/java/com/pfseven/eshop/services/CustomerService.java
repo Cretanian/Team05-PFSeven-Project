@@ -1,12 +1,13 @@
 package com.pfseven.eshop.services;
 
+import com.pfseven.eshop.interfaces.CustomerServiceInterface;
 import com.pfseven.eshop.models.CategoryID;
 import com.pfseven.eshop.models.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 
-public class CustomerService {
+public class CustomerService implements CustomerServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     public Integer newCustomerInput(){

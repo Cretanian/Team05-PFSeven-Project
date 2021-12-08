@@ -1,5 +1,6 @@
 package com.pfseven.eshop.services;
 
+import com.pfseven.eshop.interfaces.OrderServiceInterface;
 import com.pfseven.eshop.models.OrderItem;
 import com.pfseven.eshop.models.Order;
 import com.pfseven.eshop.models.Product;
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class OrderService {
+public class OrderService implements OrderServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     public void newOrderInput(Order newOrder){
@@ -42,6 +43,7 @@ public class OrderService {
             logger.info("Choose how many you want ");
             totalProduct = scannerInput.nextInt();
             scannerInput.nextLine();
+
 //            if(totalProduct <= ){
 //                //change stock - total and update DB
 //                orderItem.setTotal(totalProduct);

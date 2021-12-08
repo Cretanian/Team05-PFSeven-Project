@@ -1,11 +1,12 @@
 package com.pfseven.eshop.services;
 
+import com.pfseven.eshop.interfaces.ProductServiceInterface;
 import com.pfseven.eshop.models.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Scanner;
 
-public class ProductService {
+public class ProductService implements ProductServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     public void newProductInput(){
