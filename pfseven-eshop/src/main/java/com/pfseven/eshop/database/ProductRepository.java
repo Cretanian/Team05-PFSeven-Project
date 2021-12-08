@@ -2,29 +2,62 @@ package com.pfseven.eshop.database;
 
 import com.pfseven.eshop.model.Product;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ProductRepository {
-   private DatabasePF7Project test;
+   private Connection connection;
 
 
-   public ProductRepository(DatabasePF7Project test1){
-      this.test = test1;
+   public ProductRepository(Connection connection){
+      this.connection = connection;
    }
 
 
 
-   public Product getProductfromID (int id) throws SQLException {
+   public Product getProductFromID (int id) throws SQLException {
       Product product = new Product();
-      PreparedStatement statement = this.test.getDBConnection().prepareStatement("SELECT * FROM PRODUCT WHERE(product_ID = ?)");
+      PreparedStatement statement = this.connection.prepareStatement("SELECT * FROM PRODUCT WHERE(product_ID = ?)");
       statement.setString(1, String.valueOf(id));
       ResultSet resultSet =  statement.executeQuery();
       resultSet.next();
-      System.out.println(resultSet.getString("price"));
+      product.setProductID(resultSet.getInt(1));
+      product.setProductName(resultSet.getString(2));
+      product.setPrice(resultSet.getBigDecimal(3));
+      product.setStock(resultSet.getInt(4));
 
       return product;
+   }
+
+   public Product getProductFromName (String name) throws SQLException {
+      Product product = new Product();
+      PreparedStatement statement = this.connection.prepareStatement("SELECT * FROM PRODUCT WHERE(PRODUCTNAME= ?)");
+      statement.setString(1, name);
+      ResultSet resultSet =  statement.executeQuery();
+      resultSet.next();
+      //resultSet.beforeFirst();
+      product.setProductID(resultSet.getInt(1));
+      product.setProductName(resultSet.getString(2));
+      product.setPrice(resultSet.getBigDecimal(3));
+      product.setStock(resultSet.getInt(4));
+
+      return product;
+   }
+
+   public void insertProductToDb(Product product) throws SQLException {
+      PreparedStatement statement = this.connection.prepareStatement("INSERT INTO PRODUCT (product_ID,productName,price,stock) VALUES ( NULL, ?, ?, ? ) ");
+      statement.setString(1, product.getProductName());
+      statement.setBigDecimal(2, product.getPrice());
+      statement.setInt(3, product.getStock());
+      statement.executeUpdate();
+   }
+
+   public void updateProductToDb(Product product) throws SQLException {
+
+      PreparedStatement statement = this.connection.prepareStatement("UPDATE PRODUCT SET PRODUCTNAME = ?,PRICE=? ,STOCK=?     WHERE product_ID=?");
+      statement.setString(1, product.getProductName());
+      statement.setBigDecimal(2, product.getPrice());
+      statement.setInt(3, product.getStock());
+      statement.setInt(4,product.getProductID());
+      statement.executeUpdate();
    }
 }
