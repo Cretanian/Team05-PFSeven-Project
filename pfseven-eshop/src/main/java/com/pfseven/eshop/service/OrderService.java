@@ -9,7 +9,9 @@ import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -126,6 +128,9 @@ public class OrderService implements OrderServiceInterface {
             double discount = (double)totalDiscount / 100;
 
             orderCost = orderCost.multiply(BigDecimal.valueOf(1-discount));
+
+            orderCost = orderCost.setScale(2, RoundingMode.HALF_UP);  //needed for scale correction in case of multiplying with 2 BigDecimal (XXX.xx)
+
             System.out.println("Your discount is: " + totalDiscount + ", so the final order cost is: " + orderCost + "$");
 
             orderRepository.saveOrderToDB(order);
