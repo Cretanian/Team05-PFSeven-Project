@@ -1,5 +1,6 @@
 package com.pfseven.eshop.database;
 
+import com.pfseven.eshop.classinterface.DatabasePF7ProjectInterface;
 import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.Scanner;
 
-public class DatabasePF7Project {
+public class DatabasePF7Project implements DatabasePF7ProjectInterface {
 
    String firstName = null;
    String lastName = null;
@@ -17,7 +18,6 @@ public class DatabasePF7Project {
 //   private static final String DB_CONNECTION_URL_FILE_MODE = "jdbc:h2:C:/Users/spyro/IdeaProjects/Team05-PFSeven-Project/databasePF7Shop";
 //   private static final String DB_USERNAME = "admin";
 //   private static final String DB_PASSWORD = "admin123";
-
 
    private static final String DB_CONNECTION_URL_MEMORY_MODE = "jdbc:h2:mem:sample";
    private static final String DB_USERNAME = "sa";
