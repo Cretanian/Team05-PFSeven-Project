@@ -1,4 +1,6 @@
 package com.pfseven.eshop.database;
 
-public class CategoryIDRepository {
+import com.pfseven.eshop.classinterface.CategoryIDRepositoryInterface;
+
+public class CategoryIDRepository implements CategoryIDRepositoryInterface {
 }

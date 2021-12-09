@@ -1,18 +1,17 @@
 package com.pfseven.eshop.database;
 
+import com.pfseven.eshop.classinterface.ProductRepositoryInterface;
 import com.pfseven.eshop.model.Product;
 
 import java.sql.*;
 
-public class ProductRepository {
+public class ProductRepository implements ProductRepositoryInterface {
    private Connection connection;
 
 
    public ProductRepository(Connection connection){
       this.connection = connection;
    }
-
-
 
    public Product getProductFromID (int id) throws SQLException {
       Product product = new Product();

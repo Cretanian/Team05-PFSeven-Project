@@ -1,4 +1,6 @@
 package com.pfseven.eshop.database;
 
-public class OrderItemRepository {
+import com.pfseven.eshop.classinterface.OrderItemRepositoryInterface;
+
+public class OrderItemRepository implements OrderItemRepositoryInterface {
 }
