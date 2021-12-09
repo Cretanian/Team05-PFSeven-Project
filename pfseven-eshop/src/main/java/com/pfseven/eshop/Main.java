@@ -22,7 +22,7 @@ public class Main {
        DatabasePF7Project controller = new DatabasePF7Project();
        controller.startServer();
        controller.createDBConnection();
-//       controller.initializeDB();
+       controller.initializeDB();
 
       // controller.closeServer();
         ProductRepository productRepository = new ProductRepository(controller.getDBConnection());

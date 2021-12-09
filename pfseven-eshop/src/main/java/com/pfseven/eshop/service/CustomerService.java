@@ -34,7 +34,7 @@ public class CustomerService implements CustomerServiceInterface {
             String string = in.nextLine();
             switch (string) {
                 case "B2B":
-                case "b2b":                         //to do cases
+                case "b2b":
                     customer.setCategoryID(CategoryID.B2B);
                     break label;
                 case "B2C":

@@ -108,9 +108,11 @@ public class OrderService implements OrderServiceInterface {
             logger.info("WRONG ... Try again...");
         }
         while(true);
-
-        logger.info("Order {}",order);
-
+        //add to DB
+        if (!order.getOrderList().isEmpty()) {
+            orderRepository.saveOrderToDB(order);
+            logger.info("Order {}", order);
+        }
         // ^   > <
 
 
