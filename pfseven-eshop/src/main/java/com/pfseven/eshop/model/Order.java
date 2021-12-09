@@ -1,5 +1,6 @@
 package com.pfseven.eshop.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,6 @@ public class Order {
     private ArrayList<OrderItem> orderList;
     private PaymentMethod paymentMethod;
     private String pending;
-    private Integer cost;
+    private BigDecimal cost;
 //    private List<Product> products;
 }

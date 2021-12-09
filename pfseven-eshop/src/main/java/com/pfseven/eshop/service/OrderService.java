@@ -136,11 +136,12 @@ public class OrderService implements OrderServiceInterface {
         }
         // ^   > <
 
-
+        order.setCost(orderCost);
 
         //newOrder.setOrderList(orderList);
 
         //add order to DB
+        orderRepository.saveOrderToDB(order);
     }
 
     private int paymentMethodDiscount(PaymentMethod paymentMethod) {
