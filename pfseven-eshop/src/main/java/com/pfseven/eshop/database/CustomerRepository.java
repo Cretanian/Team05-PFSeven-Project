@@ -14,7 +14,7 @@ public class CustomerRepository {
         this.connection = connection;
     }
 
-    public int convertCategoryIDtoInt(CategoryID id) {
+    public int convertCategoryIDToInt(CategoryID id) {
         switch (id) {
             case B2B:
                 return 1;
@@ -46,7 +46,7 @@ public class CustomerRepository {
         PreparedStatement statement = this.connection.prepareStatement("INSERT INTO CUSTOMER(CUSTOMER_ID,FIRST_NAME,LAST_NAME,CATEGORY_ID) VALUES(NULL,?,?,?)");
         statement.setString(1, newCustomer.getFirstName());
         statement.setString(2, newCustomer.getLastName());
-        int categoryID = convertCategoryIDtoInt(newCustomer.getCategoryID());
+        int categoryID = convertCategoryIDToInt(newCustomer.getCategoryID());
         statement.setString(3, String.valueOf(categoryID));
         statement.executeUpdate();
     }
