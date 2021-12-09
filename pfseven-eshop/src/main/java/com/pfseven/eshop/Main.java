@@ -1,12 +1,15 @@
 package com.pfseven.eshop;
 
 import com.pfseven.eshop.database.*;
+import com.pfseven.eshop.model.CategoryID;
+import com.pfseven.eshop.model.Customer;
 import com.pfseven.eshop.model.Order;
 import com.pfseven.eshop.service.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -17,7 +20,8 @@ public class Main {
        DatabasePF7Project controller = new DatabasePF7Project();
        controller.startServer();
        controller.createDBConnection();
-       controller.initializeDB();
+       //controller.initializeDB();
+
 
         ProductRepository productRepository = new ProductRepository(controller.getDBConnection());
         ProductService productService = new ProductService(productRepository);
@@ -28,6 +32,9 @@ public class Main {
         OrderRepository orderRepository = new OrderRepository(controller.getDBConnection());
         OrderService newOrderInput = new OrderService(orderRepository, productRepository, customerRepository);
 
+
+        ReportsRepository reportsRepository = new ReportsRepository();
+        ReportsService reportsService = new ReportsService();
 
         logger.info("Hello admin! Select action:");
         String userInput = "";
@@ -48,7 +55,8 @@ public class Main {
                     break;
                 case "3":
                     logger.info("Getting reports!");
-                                                            //ADD METHOD
+                    getReports(reportsService,customerService);
+                    //method
                     break;
                 case "4":
                     logger.info("Later!!!");
@@ -57,28 +65,30 @@ public class Main {
                     logger.info("Wrong input.. Try again..");
             }
         }
+
+
         scannerInput.close();
+        controller.closeDBConnection(controller.getDBConnection());
+        controller.closeServer();
     }
 
     private static void chooseProductAction(ProductService productService) throws SQLException {
         Scanner scannerInput = new Scanner(System.in);
         String userInput = "";
 
+
         while (!userInput.equals("C")) {
-            logger.info("A) Add new product  B) Edit existing product C) Go back to menu");
+            logger.info("A) Add new product  B) Edit existing product C) Kill me plz");
             userInput = scannerInput.nextLine();
-            switch (userInput) {
+            switch (userInput) {                            //check statement later
                 case "A":
-                case "a":
                     productService.newProductInput();
                     break;
                 case "B":
-                case "b":
                     productService.editProduct();
                     break;
                 case "C":
-                case "c":
-                    logger.info("Bey!");
+                    logger.info("Thank you kind sir!");
                     break;
                 default:
                     logger.info("Wrong input.. Try again..");
@@ -89,28 +99,29 @@ public class Main {
     private static Integer getCustomerID(CustomerService customerService) throws SQLException {
         Scanner scannerInput = new Scanner(System.in);
         String userInput = "";
-        Integer customerIDHelper = -1;
+        //Change name of customerID!!
+        Integer customerID = -1;
 
-        while (customerIDHelper == -1) {
+        while (customerID == -1) {
             logger.info("Select customer:");
-            logger.info("A) Add new customer  B) Get existing customer C) Proceed");
+            logger.info("A) Add new customer  B) Get existing customer C) Kill me plz");
             userInput = scannerInput.nextLine();
             switch (userInput) {
                 case "A":
-                    customerIDHelper = customerService.newCustomerInput();
+                    customerID = customerService.newCustomerInput();
                     break;
                 case "B":
-                    customerIDHelper = customerService.getCustomerIDfromDB();
+                    customerID = customerService.getCustomerIDfromDB();
                     break;
                 case "C":
-                    logger.info("Next step:");
-                    customerIDHelper = -2;
+                    logger.info("Thank you kind sir!");
+                    customerID = -2;
                     break;
                 default:
                     logger.info("Wrong input.. Try again..");
             }
         }
-        return customerIDHelper;
+        return customerID;
     }
 
     private static void placeOrder(OrderService orderService, CustomerService customerService) throws SQLException {
@@ -127,4 +138,59 @@ public class Main {
         }
     }
 
+    private static void getReports (ReportsService reportsService, CustomerService customerService) throws SQLException {
+
+            Scanner scannerInput = new Scanner(System.in);
+            String userInput = "";
+
+            while (!userInput.equals("E")) {
+                logger.info("A) Get total number and cost of purchases for a particual customer" +
+                        "  B) Get total number and cost of purchases per customer category" +
+                        "  C) Get total number and cost of purchases per payment method" +
+                        "  D) Get the customer(s) who purchased the most expensive product and how many times" +
+                        "  E) Terminate");
+
+                userInput = scannerInput.nextLine();
+                switch (userInput) {                            //check statement later
+                    case "A":
+                        getFirstReport(customerService);
+                        break;
+                    case "B":
+                        getSecondReport();
+                        break;
+                    case "C":
+                        getThirdReport ();
+                        break;
+                    case "D":
+                        getFourthReport ();
+                        break;
+                    case "E":
+                        break;
+                    default:
+                        logger.info("Wrong input.. Try again..");
+                }
+            }
+    }
+    private static void getFirstReport (CustomerService customerService) throws SQLException {
+
+        int custID = customerService.getCustomerIDfromDB();
+
+
+
+        //Integer customerID = getCustomerID(customerService);
+
+
+    }
+
+    private static void getSecondReport () {
+
+    }
+
+    private static void getThirdReport () {
+
+    }
+
+    private static void getFourthReport () {
+
+    }
 }
