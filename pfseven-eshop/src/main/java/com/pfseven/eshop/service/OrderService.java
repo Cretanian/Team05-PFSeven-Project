@@ -139,16 +139,13 @@ public class OrderService implements OrderServiceInterface {
         else {
             logger.info("Your order list is empty!");
         }
-        // ^   > <
-
-
 
         //newOrder.setOrderList(orderList);
 
         //add order to DB
     }
 
-    private int paymentMethodDiscount(PaymentMethod paymentMethod) {
+    public int paymentMethodDiscount(PaymentMethod paymentMethod) {
         switch(paymentMethod) {
             case CASH:
                 return 0;
@@ -160,7 +157,7 @@ public class OrderService implements OrderServiceInterface {
         return -1;
     }
 
-    private int categoryIDDiscount(CategoryID categoryID) {
+    public int categoryIDDiscount(CategoryID categoryID) {
         switch (categoryID) {
             case B2B:
                 return 20;
