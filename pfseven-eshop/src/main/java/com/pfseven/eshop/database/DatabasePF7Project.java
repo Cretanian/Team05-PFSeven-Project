@@ -1,8 +1,6 @@
 package com.pfseven.eshop.database;
 
-import com.pfseven.eshop.model.CategoryID;
-import com.pfseven.eshop.model.Customer;
-import com.pfseven.eshop.model.PaymentMethod;
+import com.pfseven.eshop.classinterface.DatabasePF7ProjectInterface;
 import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.Scanner;
 
-public class DatabasePF7Project {
+public class DatabasePF7Project implements DatabasePF7ProjectInterface {
 
    String firstName = null;
    String lastName = null;
@@ -20,7 +18,6 @@ public class DatabasePF7Project {
 //   private static final String DB_CONNECTION_URL_FILE_MODE = "jdbc:h2:C:/Users/spyro/IdeaProjects/Team05-PFSeven-Project/databasePF7Shop";
 //   private static final String DB_USERNAME = "admin";
 //   private static final String DB_PASSWORD = "admin123";
-
 
    private static final String DB_CONNECTION_URL_MEMORY_MODE = "jdbc:h2:mem:sample";
    private static final String DB_USERNAME = "sa";
@@ -95,7 +92,6 @@ public class DatabasePF7Project {
               " customer_ID INTEGER not NULL," +
               " payment_method_id INTEGER not NULL," +
               " pending varchar(5)," +
-              " cost NUMERIC(6,2)," +
               " PRIMARY KEY (order_ID)," +
               " CONSTRAINT FK_CUSTOMER FOREIGN KEY(customer_ID) REFERENCES Customer(customer_ID)" +
               " ON DELETE NO ACTION ON UPDATE NO ACTION," +
@@ -136,10 +132,11 @@ public class DatabasePF7Project {
 
       databaseCreation = statement.executeUpdate(sql);
 
-       sql = "INSERT INTO ORDERS (ORDER_ID, CUSTOMER_ID, PAYMENT_METHOD_ID, PENDING, COST)" +
-              "VALUES (NULL, '2', '2', 'NO', 100.30), (NULL, '2', '3', 'NO', 43.21), (NULL, '2', '1', 'YES', 32.90), " +
-              "(NULL, '3', '2', 'NO', 34.60), (NULL, '3', '1', 'YES', 45.99), (NULL, '1', '3', 'NO', 140.50)," +
-              "(NULL, '1', '1', 'NO', 257.50), (NULL, '1', '2', 'NO', 300.20), (NULL, '1', '3', 'YES', 32.30);";
+       sql = "INSERT INTO ORDERS (ORDER_ID, CUSTOMER_ID, PAYMENT_METHOD_ID, PENDING)" +
+              "VALUES (NULL, '2', '2', 'NO'), (NULL, '2', '3', 'NO'), (NULL, '2', '1', 'YES'), " +
+              "(NULL, '3', '2', 'NO'), (NULL, '3', '1', 'YES'), (NULL, '1', '3', 'NO')," +
+              "(NULL, '1', '1', 'NO'), (NULL, '1', '2', 'NO'), (NULL, '1', '3', 'YES');";
+
       databaseCreation = statement.executeUpdate(sql);
 
       sql = "INSERT INTO PRODUCTORDER (ORDER_ID, PRODUCT_ID, QUANTITY)" +
@@ -154,65 +151,6 @@ public class DatabasePF7Project {
 
       logger.info("Create tables was successful with productTable {}.", databaseCreation);
       statement.close();
-   }
-
-   ////////////////////////////ADDING REPORT METHODS////////////////////////////////////////////
-
-   //first report method
-   public void printNumberAndCostOrdersPerCustomer(Customer customer) throws SQLException {
-
-      PreparedStatement statement = this.getDBConnection().prepareStatement("SELECT COUNT(CUSTOMER_ID) FROM ORDERS WHERE (CUSTOMER_ID = ?)");
-      statement.setString(1, String.valueOf(customer.getCustomerID()));
-      ResultSet resultSet = statement.executeQuery();
-      resultSet.next();
-      logger.info("{} {} has placed {} orders.",customer.getFirstName(),customer.getLastName(),resultSet.toString());
-
-      statement = this.getDBConnection().prepareStatement("SELECT SUM(COST) FROM ORDERS HAVING (CUSTOMER_ID = ?)");
-      statement.setString(1, String.valueOf(customer.getCustomerID()));
-      resultSet = statement.executeQuery();
-      resultSet.next();
-      logger.info("Total cost of purchases is: {}",resultSet.toString());
-   }
-
-   //second report method
-   public void printNumberAndCostOrderPerCategory(CategoryID categoryID) throws SQLException {
-
-      PreparedStatement statement = this.getDBConnection().prepareStatement("SELECT COUNT(ORDERS.CUSTOMER_ID) FROM ORDERS JOIN CUSTOMER on ORDERS.CUSTOMER_ID = CUSTOMER.CUSTOMER_ID WHERE CUSTOMER.CATEGORY_ID = ?");
-      statement.setString(1, String.valueOf(categoryID));
-      ResultSet resultSet = statement.executeQuery();
-      resultSet.next();
-      logger.info("There have been {} {} orders .",resultSet.toString(),categoryID);
-
-      statement = this.getDBConnection().prepareStatement("SELECT SUM(ORDERS.COST) FROM ORDERS JOIN CUSTOMER on ORDERS.CUSTOMER_ID = CUSTOMER.CUSTOMER_ID HAVING CUSTOMER.CATEGORY_ID = ?");
-      statement.setString(1, String.valueOf(categoryID));
-      resultSet = statement.executeQuery();
-      resultSet.next();
-      logger.info("Total cost of {} orders is: {}.",categoryID,resultSet.toString());
-   }
-
-   //third report method
-   public void printNUmberAndCostOrderPerPaymentMethod(PaymentMethod paymentMethod) throws SQLException {
-
-      PreparedStatement statement = this.getDBConnection().prepareStatement("SELECT COUNT(*) FROM ORDERS WHERE PAYMENT_METHOD_ID = ?");
-      statement.setString(1, String.valueOf(paymentMethod));
-      ResultSet resultSet = statement.executeQuery();
-      resultSet.next();
-      logger.info("There have been {} orders via {}.",resultSet.toString(),paymentMethod);
-
-      statement = this.getDBConnection().prepareStatement("SELECT SUM(COST) FROM ORDERS WHERE PAYMENT_METHOD_ID = ?");
-      statement.setString(1, String.valueOf(paymentMethod));
-      resultSet = statement.executeQuery();
-      resultSet.next();
-      logger.info("Total cost of {} orders is: {}.",paymentMethod,resultSet.toString());
-   }
-
-   //fourth report method
-   public void printGoldenCustomer() throws SQLException {
-
-      PreparedStatement statement = this.getDBConnection().prepareStatement("SELECT CUSTOMER.CUSTOMER_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME, PRODUCT.PRICE FROM CUSTOMER JOIN ORDERS ON CUSTOMER.CUSTOMER_ID = ORDERS.CUSTOMER_ID JOIN PRODUCTORDER ON ORDERS.ORDER_ID = PRODUCTORDER.ORDER_ID JOIN PRODUCT ON PRODUCTORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID ORDER BY PRODUCT.PRICE DESC LIMIT 1");
-      ResultSet resultSet = statement.executeQuery();
-      resultSet.next();
-      //use a logger
    }
 
 

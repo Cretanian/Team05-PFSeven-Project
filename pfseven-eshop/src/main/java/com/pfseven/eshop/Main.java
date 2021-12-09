@@ -1,11 +1,6 @@
 package com.pfseven.eshop;
 
-import com.pfseven.eshop.database.CustomerRepository;
-import com.pfseven.eshop.database.DatabasePF7Project;
-import com.pfseven.eshop.database.OrderRepository;
-import com.pfseven.eshop.database.ProductRepository;
-import com.pfseven.eshop.model.CategoryID;
-import com.pfseven.eshop.model.Customer;
+import com.pfseven.eshop.database.*;
 import com.pfseven.eshop.model.Order;
 import com.pfseven.eshop.service.*;
 
@@ -24,30 +19,15 @@ public class Main {
        controller.createDBConnection();
        controller.initializeDB();
 
-      // controller.closeServer();
         ProductRepository productRepository = new ProductRepository(controller.getDBConnection());
         ProductService productService = new ProductService(productRepository);
 
         CustomerRepository customerRepository = new CustomerRepository(controller.getDBConnection());
         CustomerService customerService = new CustomerService(customerRepository);
-       // customerService.newCustomerInput();
+
         OrderRepository orderRepository = new OrderRepository(controller.getDBConnection());
         OrderService newOrderInput = new OrderService(orderRepository, productRepository, customerRepository);
-       // newOrderInput.newOrderInput();
-       // productService.newProductInput();
 
-        //testing method insertNewCustomer
-
-//        Customer newCustomer = new Customer();
-//
-//        newCustomer.setFirstName("stathis");
-//        newCustomer.setLastName("antonakis");
-//        newCustomer.setCategoryID(CategoryID.B2B);
-//
-//        CustomerRepository tester = new CustomerRepository(controller);
-//        tester.insertNewCustomer(newCustomer);
-
-        //end of testing
 
         logger.info("Hello admin! Select action:");
         String userInput = "";
@@ -68,7 +48,7 @@ public class Main {
                     break;
                 case "3":
                     logger.info("Getting reports!");
-                    //method
+                                                            //ADD METHOD
                     break;
                 case "4":
                     logger.info("Later!!!");
@@ -77,8 +57,6 @@ public class Main {
                     logger.info("Wrong input.. Try again..");
             }
         }
-
-
         scannerInput.close();
     }
 
@@ -86,19 +64,21 @@ public class Main {
         Scanner scannerInput = new Scanner(System.in);
         String userInput = "";
 
-
         while (!userInput.equals("C")) {
-            logger.info("A) Add new product  B) Edit existing product C) Kill me plz");
+            logger.info("A) Add new product  B) Edit existing product C) Go back to menu");
             userInput = scannerInput.nextLine();
-            switch (userInput) {                            //check statement later
+            switch (userInput) {
                 case "A":
+                case "a":
                     productService.newProductInput();
                     break;
                 case "B":
+                case "b":
                     productService.editProduct();
                     break;
                 case "C":
-                    logger.info("Thank you kind sir!");
+                case "c":
+                    logger.info("Bey!");
                     break;
                 default:
                     logger.info("Wrong input.. Try again..");
@@ -109,29 +89,28 @@ public class Main {
     private static Integer getCustomerID(CustomerService customerService) throws SQLException {
         Scanner scannerInput = new Scanner(System.in);
         String userInput = "";
-        //Change name of customerID!!
-        Integer customerID = -1;
+        Integer customerIDHelper = -1;
 
-        while (customerID == -1) {
+        while (customerIDHelper == -1) {
             logger.info("Select customer:");
-            logger.info("A) Add new customer  B) Get existing customer C) Kill me plz");
+            logger.info("A) Add new customer  B) Get existing customer C) Proceed");
             userInput = scannerInput.nextLine();
             switch (userInput) {
                 case "A":
-                    customerID = customerService.newCustomerInput();
+                    customerIDHelper = customerService.newCustomerInput();
                     break;
                 case "B":
-                    customerID = customerService.getCustomerIDfromDB();
+                    customerIDHelper = customerService.getCustomerIDfromDB();
                     break;
                 case "C":
-                    logger.info("Thank you kind sir!");
-                    customerID = -2;
+                    logger.info("Next step:");
+                    customerIDHelper = -2;
                     break;
                 default:
                     logger.info("Wrong input.. Try again..");
             }
         }
-        return customerID;
+        return customerIDHelper;
     }
 
     private static void placeOrder(OrderService orderService, CustomerService customerService) throws SQLException {

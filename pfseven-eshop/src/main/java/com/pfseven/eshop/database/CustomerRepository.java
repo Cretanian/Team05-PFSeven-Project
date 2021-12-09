@@ -1,14 +1,13 @@
 package com.pfseven.eshop.database;
 
+import com.pfseven.eshop.classinterface.CustomerRepositoryInterface;
 import com.pfseven.eshop.model.CategoryID;
 import com.pfseven.eshop.model.Customer;
 import java.sql.*;
 
-public class CustomerRepository {
+public class CustomerRepository implements CustomerRepositoryInterface {
 
     private Connection connection;
-
-
 
     public CustomerRepository(Connection connection){
         this.connection = connection;
@@ -39,8 +38,6 @@ public class CustomerRepository {
                 return null;
         }
     }
-
-
 
     public void insertNewCustomer (Customer newCustomer) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement("INSERT INTO CUSTOMER(CUSTOMER_ID,FIRST_NAME,LAST_NAME,CATEGORY_ID) VALUES(NULL,?,?,?)");
@@ -101,6 +98,5 @@ public class CustomerRepository {
 
         return id;
     }
-
 
 }

@@ -1,6 +1,6 @@
 package com.pfseven.eshop.database;
 
-import com.pfseven.eshop.model.CategoryID;
+import com.pfseven.eshop.classinterface.OrderRepositoryInterface;
 import com.pfseven.eshop.model.Order;
 import com.pfseven.eshop.model.PaymentMethod;
 
@@ -8,13 +8,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class OrderRepository {
+public class OrderRepository implements OrderRepositoryInterface {
     private Connection connection;
 
     public OrderRepository(Connection connection){
         this.connection = connection;
 
     }
+
     public int convertPaymentMethodToInt(PaymentMethod paymentMethod) {
         switch (paymentMethod) {
             case CASH:
@@ -40,13 +41,15 @@ public class OrderRepository {
                 return null;
         }
     }
+
     public void saveOrderToDB(Order order) throws SQLException {
 
             PreparedStatement statement = this.connection.prepareStatement("INSERT INTO ORDERS(ORDER_ID,CUSTOMER_ID,PAYMENT_METHOD_ID,PENDING) VALUES(NULL,?,?,NULL)");
             statement.setInt(1, order.getCustomerID());
             int paymentMethod = convertPaymentMethodToInt(order.getPaymentMethod());
             statement.setInt(2, paymentMethod);
-            //pending
+
+            //ADD PENDING HERE!!
 
             statement.executeUpdate();
 
