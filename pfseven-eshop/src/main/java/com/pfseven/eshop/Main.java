@@ -33,8 +33,8 @@ public class Main {
         OrderService newOrderInput = new OrderService(orderRepository, productRepository, customerRepository);
 
 
-        ReportsRepository reportsRepository = new ReportsRepository();
-        ReportsService reportsService = new ReportsService();
+        ReportsRepository reportsRepository = new ReportsRepository(controller.getDBConnection());
+        ReportsService reportsService = new ReportsService(reportsRepository);
 
         logger.info("Hello admin! Select action:");
         String userInput = "";
@@ -153,7 +153,7 @@ public class Main {
                 userInput = scannerInput.nextLine();
                 switch (userInput) {                            //check statement later
                     case "A":
-                        getFirstReport(customerService);
+                        getFirstReport(customerService,reportsService);
                         break;
                     case "B":
                         getSecondReport();
@@ -171,15 +171,13 @@ public class Main {
                 }
             }
     }
-    private static void getFirstReport (CustomerService customerService) throws SQLException {
+    private static void getFirstReport (CustomerService customerService, ReportsService reportsService) throws SQLException {
 
-        int custID = customerService.getCustomerIDfromDB();
+        Integer custID = customerService.getCustomerIDfromDB();
 
-
+        reportsService.getNumberAndCostOfPurchasesForCustomer(custID);
 
         //Integer customerID = getCustomerID(customerService);
-
-
     }
 
     private static void getSecondReport () {

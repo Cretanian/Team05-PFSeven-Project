@@ -52,7 +52,6 @@ public class OrderService implements OrderServiceInterface {
                 product.setProductID(scannerInput.nextInt());
                 //get rest from DB  //getProductFromID
              product  = productRepository.getProductFromID(product.getProductID());
-//             product.setProductID(product.getProductID());
             }
             else
             {
@@ -118,7 +117,7 @@ public class OrderService implements OrderServiceInterface {
 
         //add to DB
         if (!order.getOrderList().isEmpty()) {
-            System.out.println("Order cost without discount is: " + orderCost + "$");
+            logger.info("Order cost without discount is: {} €",orderCost);
 
             int paymentMethodDiscount = paymentMethodDiscount(order.getPaymentMethod());
             int categoryIDDiscount = categoryIDDiscount(customer.getCategoryID());
@@ -126,22 +125,14 @@ public class OrderService implements OrderServiceInterface {
             double discount = (double)totalDiscount / 100;
 
             orderCost = orderCost.multiply(BigDecimal.valueOf(1-discount));
-            System.out.println("Your discount is: " + totalDiscount + ", so the final order cost is: " + orderCost + "$");
-
+            logger.info("Your discount is: {}, so the final order cost is: {} €", totalDiscount,orderCost);
+            order.setCost(orderCost);
             orderRepository.saveOrderToDB(order);
             logger.info("Order {}", order);
         }
         else {
             logger.info("Your order list is empty!");
         }
-        // ^   > <
-
-        order.setCost(orderCost);
-
-        //newOrder.setOrderList(orderList);
-
-        //add order to DB
-        orderRepository.saveOrderToDB(order);
     }
 
     private int paymentMethodDiscount(PaymentMethod paymentMethod) {

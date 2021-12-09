@@ -42,10 +42,11 @@ public class OrderRepository {
     }
     public void saveOrderToDB(Order order) throws SQLException {
 
-            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO ORDERS(ORDER_ID,CUSTOMER_ID,PAYMENT_METHOD_ID,PENDING) VALUES(NULL,?,?,NULL)");
+            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO ORDERS(ORDER_ID,CUSTOMER_ID,PAYMENT_METHOD_ID,PENDING,COST) VALUES(NULL,?,?,NULL,?)");
             statement.setInt(1, order.getCustomerID());
             int paymentMethod = convertPaymentMethodToInt(order.getPaymentMethod());
             statement.setInt(2, paymentMethod);
+            statement.setBigDecimal(3, order.getCost());
             //pending
 
             statement.executeUpdate();
