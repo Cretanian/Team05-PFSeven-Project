@@ -13,6 +13,7 @@ public class CustomerRepository implements CustomerRepositoryInterface {
         this.connection = connection;
     }
 
+
     public int convertCategoryIDToInt(CategoryID id) {
         switch (id) {
             case B2B:
