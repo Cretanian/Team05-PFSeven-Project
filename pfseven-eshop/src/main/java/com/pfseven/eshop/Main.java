@@ -1,9 +1,6 @@
 package com.pfseven.eshop;
 
-import com.pfseven.eshop.database.CustomerRepository;
-import com.pfseven.eshop.database.DatabasePF7Project;
-import com.pfseven.eshop.database.OrderRepository;
-import com.pfseven.eshop.database.ProductRepository;
+import com.pfseven.eshop.database.*;
 import com.pfseven.eshop.model.CategoryID;
 import com.pfseven.eshop.model.Customer;
 import com.pfseven.eshop.model.Order;
@@ -12,6 +9,7 @@ import com.pfseven.eshop.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -22,32 +20,21 @@ public class Main {
        DatabasePF7Project controller = new DatabasePF7Project();
        controller.startServer();
        controller.createDBConnection();
-       controller.initializeDB();
+       //controller.initializeDB();
 
-      // controller.closeServer();
+
         ProductRepository productRepository = new ProductRepository(controller.getDBConnection());
         ProductService productService = new ProductService(productRepository);
 
         CustomerRepository customerRepository = new CustomerRepository(controller.getDBConnection());
         CustomerService customerService = new CustomerService(customerRepository);
-       // customerService.newCustomerInput();
+
         OrderRepository orderRepository = new OrderRepository(controller.getDBConnection());
         OrderService newOrderInput = new OrderService(orderRepository, productRepository, customerRepository);
-       // newOrderInput.newOrderInput();
-       // productService.newProductInput();
 
-        //testing method insertNewCustomer
 
-//        Customer newCustomer = new Customer();
-//
-//        newCustomer.setFirstName("stathis");
-//        newCustomer.setLastName("antonakis");
-//        newCustomer.setCategoryID(CategoryID.B2B);
-//
-//        CustomerRepository tester = new CustomerRepository(controller);
-//        tester.insertNewCustomer(newCustomer);
-
-        //end of testing
+        ReportsRepository reportsRepository = new ReportsRepository();
+        ReportsService reportsService = new ReportsService();
 
         logger.info("Hello admin! Select action:");
         String userInput = "";
@@ -68,6 +55,7 @@ public class Main {
                     break;
                 case "3":
                     logger.info("Getting reports!");
+                    getReports(reportsService,customerService);
                     //method
                     break;
                 case "4":
@@ -80,6 +68,8 @@ public class Main {
 
 
         scannerInput.close();
+        controller.closeDBConnection(controller.getDBConnection());
+        controller.closeServer();
     }
 
     private static void chooseProductAction(ProductService productService) throws SQLException {
@@ -148,4 +138,59 @@ public class Main {
         }
     }
 
+    private static void getReports (ReportsService reportsService, CustomerService customerService) throws SQLException {
+
+            Scanner scannerInput = new Scanner(System.in);
+            String userInput = "";
+
+            while (!userInput.equals("E")) {
+                logger.info("A) Get total number and cost of purchases for a particual customer" +
+                        "  B) Get total number and cost of purchases per customer category" +
+                        "  C) Get total number and cost of purchases per payment method" +
+                        "  D) Get the customer(s) who purchased the most expensive product and how many times" +
+                        "  E) Terminate");
+
+                userInput = scannerInput.nextLine();
+                switch (userInput) {                            //check statement later
+                    case "A":
+                        getFirstReport(customerService);
+                        break;
+                    case "B":
+                        getSecondReport();
+                        break;
+                    case "C":
+                        getThirdReport ();
+                        break;
+                    case "D":
+                        getFourthReport ();
+                        break;
+                    case "E":
+                        break;
+                    default:
+                        logger.info("Wrong input.. Try again..");
+                }
+            }
+    }
+    private static void getFirstReport (CustomerService customerService) throws SQLException {
+
+        int custID = customerService.getCustomerIDfromDB();
+
+
+
+        //Integer customerID = getCustomerID(customerService);
+
+
+    }
+
+    private static void getSecondReport () {
+
+    }
+
+    private static void getThirdReport () {
+
+    }
+
+    private static void getFourthReport () {
+
+    }
 }
