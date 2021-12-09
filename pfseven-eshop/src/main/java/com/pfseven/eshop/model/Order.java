@@ -18,5 +18,6 @@ public class Order {
     private ArrayList<OrderItem> orderList;
     private PaymentMethod paymentMethod;
     private String pending;
+    private Integer cost;
 //    private List<Product> products;
 }

@@ -9,6 +9,7 @@ import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -29,6 +30,8 @@ public class OrderService implements OrderServiceInterface {
     public void newOrderInput(Order newOrder, int customerID) throws SQLException {
 
         Order order = new Order();
+        Customer customer = new Customer();
+        customer = customerRepository.getCustomerFromID(customerID);
         ArrayList <OrderItem> orderList = new ArrayList<>();
         Scanner scannerInput = new Scanner(System.in);
 
@@ -36,6 +39,7 @@ public class OrderService implements OrderServiceInterface {
         String userInput;
 
         order.setCustomerID(customerID);
+        BigDecimal orderCost = new BigDecimal("0");
 
         while(true){
 
@@ -69,10 +73,13 @@ public class OrderService implements OrderServiceInterface {
                 productRepository.updateProductToDb(product);
 
                 orderList.add(orderItem);
+
+                orderCost = orderCost.add(product.getPrice().multiply(BigDecimal.valueOf(totalProduct)));
             }
             else
             {
                 logger.info("Not enough in stock.");
+                logger.info("You ordered {} {} but there are only {} in stock",totalProduct, product.getProductName(), product.getStock());
             }
 
             scannerInput.nextLine();
@@ -106,18 +113,58 @@ public class OrderService implements OrderServiceInterface {
                     break label;
             }
             logger.info("WRONG ... Try again...");
-        }
-        while(true);
+        }while(true);
+
+
         //add to DB
         if (!order.getOrderList().isEmpty()) {
+            System.out.println("Order cost without discount is: " + orderCost + "$");
+
+            int paymentMethodDiscount = paymentMethodDiscount(order.getPaymentMethod());
+            int categoryIDDiscount = categoryIDDiscount(customer.getCategoryID());
+            int totalDiscount = paymentMethodDiscount + categoryIDDiscount;
+            double discount = (double)totalDiscount / 100;
+
+            orderCost = orderCost.multiply(BigDecimal.valueOf(1-discount));
+            System.out.println("Your discount is: " + totalDiscount + ", so the final order cost is: " + orderCost + "$");
+
             orderRepository.saveOrderToDB(order);
             logger.info("Order {}", order);
         }
+        else {
+            logger.info("Your order list is empty!");
+        }
         // ^   > <
+
 
 
         //newOrder.setOrderList(orderList);
 
         //add order to DB
     }
+
+    private int paymentMethodDiscount(PaymentMethod paymentMethod) {
+        switch(paymentMethod) {
+            case CASH:
+                return 0;
+            case CREDIT_CARD:
+                return 15;
+            case WIRE_TRANSFER:
+                return 10;
+        }
+        return -1;
+    }
+
+    private int categoryIDDiscount(CategoryID categoryID) {
+        switch (categoryID) {
+            case B2B:
+                return 20;
+            case B2C:
+                return 0;
+            case B2G:
+                return 50;
+        }
+        return -1;
+    }
+
 }
