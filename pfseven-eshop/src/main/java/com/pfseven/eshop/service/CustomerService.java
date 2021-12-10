@@ -19,7 +19,7 @@ public class CustomerService implements CustomerServiceInterface {
         this.customerRepository = customerRepository;
     }
 
-    public Integer newCustomerInput() throws SQLException {
+    public Integer newCustomerInput()  {
         Customer customer = new Customer();
         Scanner in = new Scanner(System.in);
         Integer customerID = -1;
@@ -53,22 +53,29 @@ public class CustomerService implements CustomerServiceInterface {
 
         //add customer to db
         customerRepository.insertNewCustomer(customer);
+
         //get max CustomerID save it into customerID
         customerID = customerRepository.findMaxID();
 
         return customerID;
     }
 
-    public Integer getCustomerIDfromDB() throws SQLException {
+    public Integer getCustomerIDfromDB()  {
         Integer customerID = -1;
         Scanner scannerInput = new Scanner(System.in);
 
 
         logger.info("A) Get customer from customer ID  B) Get customer from name");
 
-        if(scannerInput.nextLine().equals("A")){
+        if(scannerInput.nextLine().equals("A")) {
             logger.info("Enter ID");
-            return scannerInput.nextInt();
+            try {
+                return scannerInput.nextInt();
+            }catch (Exception e){
+                e.printStackTrace();
+                logger.error("WRONG input...");////////////////////////////////////////////////
+                return -1;
+            }
         }
         //It requires else if, because if we do not place "A", it tells you to choose the customer regardless.
         else

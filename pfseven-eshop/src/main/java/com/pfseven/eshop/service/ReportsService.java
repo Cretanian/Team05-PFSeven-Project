@@ -23,7 +23,7 @@ public class ReportsService {
         this.reportsRepository= reportsRepository;
     }
 
-    public void getNumberAndCostOfPurchasesForCustomer(Integer customerID) throws SQLException {
+    public void getNumberAndCostOfPurchasesForCustomer(Integer customerID)  {
 
         int number = reportsRepository.totalNumberOfOrdersForCustomer(customerID);
         BigDecimal cost = reportsRepository.totalCostOfPurchases(customerID);
@@ -31,7 +31,7 @@ public class ReportsService {
         logger.info("customer {} number of purchases {} with total cost of {}",customerID,number,cost);
 
     }
-    public void getNumberAndCostOfPurchasesForCustomerCategory() throws SQLException {
+    public void getNumberAndCostOfPurchasesForCustomerCategory()  {
         int number = reportsRepository.totalNumberOfOrdersPerCategory(CategoryID.B2C);
         BigDecimal cost = reportsRepository.totalCostOfOrdersPerCategory(CategoryID.B2C);
         logger.info("Total number of purchases is {} with {} cost for the B2C",number,cost);
@@ -42,7 +42,7 @@ public class ReportsService {
         cost = reportsRepository.totalCostOfOrdersPerCategory(CategoryID.B2G);
         logger.info("Total number of purchases is {} with {} cost for the B2G",number,cost);
     }
-    public void getNumberAndCostOfPurchasesPerPaymentMethod() throws SQLException {
+    public void getNumberAndCostOfPurchasesPerPaymentMethod()  {
         int number = reportsRepository.totalNumberOfOrdersPerPaymentMethod(PaymentMethod.CASH);
         BigDecimal cost = reportsRepository.totalCostOfOrdersPerPaymentMethod(PaymentMethod.CASH);
         logger.info("Total number of purchases using CASH is {} with {} cost ",number,cost);
@@ -53,7 +53,7 @@ public class ReportsService {
         cost = reportsRepository.totalCostOfOrdersPerPaymentMethod(PaymentMethod.WIRE_TRANSFER);
         logger.info("Total number of purchases using WIRE_TRANSFER is {} with {} cost ",number,cost);
     }
-    public void getCustomerWithTheMostExpensiveItem() throws SQLException {
+    public void getCustomerWithTheMostExpensiveItem()  {
         reportsRepository.printGoldenCustomer();
     }
 

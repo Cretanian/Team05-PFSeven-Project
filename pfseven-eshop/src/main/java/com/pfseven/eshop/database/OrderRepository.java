@@ -40,9 +40,9 @@ public class OrderRepository {
                 return null;
         }
     }
-    public void saveOrderToDB(Order order) throws SQLException {
+    public void saveOrderToDB(Order order)  {
+        try(PreparedStatement statement = this.connection.prepareStatement("INSERT INTO ORDERS(ORDER_ID,CUSTOMER_ID,PAYMENT_METHOD_ID,PENDING,COST) VALUES(NULL,?,?,NULL,?)");) {
 
-            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO ORDERS(ORDER_ID,CUSTOMER_ID,PAYMENT_METHOD_ID,PENDING,COST) VALUES(NULL,?,?,NULL,?)");
             statement.setInt(1, order.getCustomerID());
             int paymentMethod = convertPaymentMethodToInt(order.getPaymentMethod());
             statement.setInt(2, paymentMethod);
@@ -50,7 +50,9 @@ public class OrderRepository {
             //pending
 
             statement.executeUpdate();
-
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
 }

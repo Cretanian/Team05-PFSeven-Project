@@ -27,7 +27,7 @@ public class OrderService implements OrderServiceInterface {
         this.customerRepository = customerRepository;
     }
 
-    public void newOrderInput(Order newOrder, int customerID) throws SQLException {
+    public void newOrderInput(Order newOrder, int customerID)  {
 
         Order order = new Order();
         Customer customer = new Customer();

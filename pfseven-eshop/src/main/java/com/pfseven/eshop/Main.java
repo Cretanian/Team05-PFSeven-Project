@@ -72,7 +72,7 @@ public class Main {
         controller.closeServer();
     }
 
-    private static void chooseProductAction(ProductService productService) throws SQLException {
+    private static void chooseProductAction(ProductService productService)  {
         Scanner scannerInput = new Scanner(System.in);
         String userInput = "";
 
@@ -96,7 +96,7 @@ public class Main {
         }
     }
 
-    private static Integer getCustomerID(CustomerService customerService) throws SQLException {
+    private static Integer getCustomerID(CustomerService customerService)  {
         Scanner scannerInput = new Scanner(System.in);
         String userInput = "";
         //Change name of customerID!!
@@ -124,7 +124,7 @@ public class Main {
         return customerID;
     }
 
-    private static void placeOrder(OrderService orderService, CustomerService customerService) throws SQLException {
+    private static void placeOrder(OrderService orderService, CustomerService customerService)  {
 
         Order newOrder = new Order();
 
@@ -138,7 +138,7 @@ public class Main {
         }
     }
 
-    private static void getReports (ReportsService reportsService, CustomerService customerService) throws SQLException {
+    private static void getReports (ReportsService reportsService, CustomerService customerService) {
 
             Scanner scannerInput = new Scanner(System.in);
             String userInput = "";
@@ -171,7 +171,7 @@ public class Main {
                 }
             }
     }
-    private static void getFirstReport (CustomerService customerService, ReportsService reportsService) throws SQLException {
+    private static void getFirstReport (CustomerService customerService, ReportsService reportsService)  {
 
         Integer custID = customerService.getCustomerIDfromDB();
 
@@ -180,15 +180,15 @@ public class Main {
         //Integer customerID = getCustomerID(customerService);
     }
 
-    private static void getSecondReport (ReportsService reportsService) throws SQLException {
+    private static void getSecondReport (ReportsService reportsService)  {
         reportsService.getNumberAndCostOfPurchasesForCustomerCategory();
     }
 
-    private static void getThirdReport (ReportsService reportsService) throws SQLException {
+    private static void getThirdReport (ReportsService reportsService)  {
         reportsService.getNumberAndCostOfPurchasesPerPaymentMethod();
     }
 
-    private static void getFourthReport (ReportsService reportsService) throws SQLException {
+    private static void getFourthReport (ReportsService reportsService)  {
         reportsService.getCustomerWithTheMostExpensiveItem();
     }
 }
