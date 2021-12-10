@@ -31,6 +31,30 @@ public class ReportsService {
         logger.info("customer {} number of purchases {} with total cost of {}",customerID,number,cost);
 
     }
-
+    public void getNumberAndCostOfPurchasesForCustomerCategory() throws SQLException {
+        int number = reportsRepository.totalNumberOfOrdersPerCategory(CategoryID.B2C);
+        BigDecimal cost = reportsRepository.totalCostOfOrdersPerCategory(CategoryID.B2C);
+        logger.info("Total number of purchases is {} with {} cost for the B2C",number,cost);
+        number = reportsRepository.totalNumberOfOrdersPerCategory(CategoryID.B2B);
+        cost = reportsRepository.totalCostOfOrdersPerCategory(CategoryID.B2B);
+        logger.info("Total number of purchases is {} with {} cost for the B2B",number,cost);
+        number = reportsRepository.totalNumberOfOrdersPerCategory(CategoryID.B2G);
+        cost = reportsRepository.totalCostOfOrdersPerCategory(CategoryID.B2G);
+        logger.info("Total number of purchases is {} with {} cost for the B2G",number,cost);
+    }
+    public void getNumberAndCostOfPurchasesPerPaymentMethod() throws SQLException {
+        int number = reportsRepository.totalNumberOfOrdersPerPaymentMethod(PaymentMethod.CASH);
+        BigDecimal cost = reportsRepository.totalCostOfOrdersPerPaymentMethod(PaymentMethod.CASH);
+        logger.info("Total number of purchases using CASH is {} with {} cost ",number,cost);
+        number = reportsRepository.totalNumberOfOrdersPerPaymentMethod(PaymentMethod.CREDIT_CARD);
+        cost = reportsRepository.totalCostOfOrdersPerPaymentMethod(PaymentMethod.CREDIT_CARD);
+        logger.info("Total number of purchases using CREDIT_CARD is {} with {} cost ",number,cost);
+        number = reportsRepository.totalNumberOfOrdersPerPaymentMethod(PaymentMethod.WIRE_TRANSFER);
+        cost = reportsRepository.totalCostOfOrdersPerPaymentMethod(PaymentMethod.WIRE_TRANSFER);
+        logger.info("Total number of purchases using WIRE_TRANSFER is {} with {} cost ",number,cost);
+    }
+    public void getCustomerWithTheMostExpensiveItem() throws SQLException {
+        reportsRepository.printGoldenCustomer();
+    }
 
 }

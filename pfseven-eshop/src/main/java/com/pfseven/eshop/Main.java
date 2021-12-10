@@ -20,7 +20,7 @@ public class Main {
        DatabasePF7Project controller = new DatabasePF7Project();
        controller.startServer();
        controller.createDBConnection();
-       //controller.initializeDB();
+       controller.initializeDB();
 
 
         ProductRepository productRepository = new ProductRepository(controller.getDBConnection());
@@ -144,7 +144,7 @@ public class Main {
             String userInput = "";
 
             while (!userInput.equals("E")) {
-                logger.info("A) Get total number and cost of purchases for a particual customer" +
+                logger.info("A) Get total number and cost of purchases for a particular customer" +
                         "  B) Get total number and cost of purchases per customer category" +
                         "  C) Get total number and cost of purchases per payment method" +
                         "  D) Get the customer(s) who purchased the most expensive product and how many times" +
@@ -156,13 +156,13 @@ public class Main {
                         getFirstReport(customerService,reportsService);
                         break;
                     case "B":
-                        getSecondReport();
+                        getSecondReport(reportsService);
                         break;
                     case "C":
-                        getThirdReport ();
+                        getThirdReport (reportsService);
                         break;
                     case "D":
-                        getFourthReport ();
+                        getFourthReport (reportsService);
                         break;
                     case "E":
                         break;
@@ -180,15 +180,15 @@ public class Main {
         //Integer customerID = getCustomerID(customerService);
     }
 
-    private static void getSecondReport () {
-
+    private static void getSecondReport (ReportsService reportsService) throws SQLException {
+        reportsService.getNumberAndCostOfPurchasesForCustomerCategory();
     }
 
-    private static void getThirdReport () {
-
+    private static void getThirdReport (ReportsService reportsService) throws SQLException {
+        reportsService.getNumberAndCostOfPurchasesPerPaymentMethod();
     }
 
-    private static void getFourthReport () {
-
+    private static void getFourthReport (ReportsService reportsService) throws SQLException {
+        reportsService.getCustomerWithTheMostExpensiveItem();
     }
 }

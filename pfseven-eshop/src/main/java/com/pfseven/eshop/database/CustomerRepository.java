@@ -16,9 +16,9 @@ public class CustomerRepository implements CustomerRepositoryInterface {
 
     public int convertCategoryIDToInt(CategoryID id) {
         switch (id) {
-            case B2B:
-                return 1;
             case B2C:
+                return 1;
+            case B2B:
                 return 2;
             case B2G:
                 return 3;
@@ -30,9 +30,9 @@ public class CustomerRepository implements CustomerRepositoryInterface {
     public CategoryID convertIntToCategoryID(int id) {
         switch (id) {
             case 1:
-                return CategoryID.B2B;
-            case 2:
                 return CategoryID.B2C;
+            case 2:
+                return CategoryID.B2B;
             case 3:
                 return CategoryID.B2G;
             default:

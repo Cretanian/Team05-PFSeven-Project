@@ -17,11 +17,11 @@ public class OrderRepository {
     }
     public int convertPaymentMethodToInt(PaymentMethod paymentMethod) {
         switch (paymentMethod) {
-            case CASH:
+            case WIRE_TRANSFER:
                 return 1;
             case CREDIT_CARD:
                 return 2;
-            case WIRE_TRANSFER:
+            case CASH:
                 return 3;
             default:
                 return 0;
@@ -31,11 +31,11 @@ public class OrderRepository {
     public PaymentMethod convertIntToCategoryID(int paymentMethod) {
         switch (paymentMethod) {
             case 1:
-                return PaymentMethod.CASH;
+                return PaymentMethod.WIRE_TRANSFER;
             case 2:
                 return PaymentMethod.CREDIT_CARD;
             case 3:
-                return PaymentMethod.WIRE_TRANSFER;
+                return PaymentMethod.CASH;
             default:
                 return null;
         }
