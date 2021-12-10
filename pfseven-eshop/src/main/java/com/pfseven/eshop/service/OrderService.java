@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 @Data
 
@@ -27,7 +28,7 @@ public class OrderService implements OrderServiceInterface {
         this.customerRepository = customerRepository;
     }
 
-    public void newOrderInput(Order newOrder, int customerID) throws SQLException {
+    public void newOrderInput(Order newOrder, int customerID) {
 
         Order order = new Order();
         Customer customer = new Customer();
@@ -43,58 +44,67 @@ public class OrderService implements OrderServiceInterface {
 
         while(true) {
 
-            OrderItem orderItem = new OrderItem();
-            Product product = new Product();
-            logger.info("A) Get product from product ID  B) Get product from name");
-            userInput = scannerInput.nextLine();
-            if(userInput.toLowerCase().equals("a")) {
-                logger.info("Enter product ID");
-                product.setProductID(scannerInput.nextInt());
-                //get rest from DB  //getProductFromID
-                product  = productRepository.getProductFromID(product.getProductID());
-//                if (product.getProductID() == -1) {
-//                    logger.info("There is no such product! Try again!");
-//                    continue;
-//                }
+            try {
+                OrderItem orderItem = new OrderItem();
+                Product product = new Product();
+                logger.info("A) Get product from product ID  B) Get product from name");
+                userInput = scannerInput.nextLine();
+                if(userInput.toLowerCase().equals("a")) {
+                    logger.info("Enter product ID");
+                    product.setProductID(scannerInput.nextInt());
+                    //get rest from DB  //getProductFromID
+                    product  = productRepository.getProductFromID(product.getProductID());
+                    if (product.getProductID() == -1) {
+                        logger.info("There is no such product! Try again!");
+                        scannerInput.nextLine();
+                        continue;
+                    }
+                }
+                else if (userInput.toLowerCase().equals("a")) {
+                    logger.info("Enter product name");
+                    String productName = scannerInput.nextLine();
+                    //get rest from DB
+                    product  = productRepository.getProductFromName(productName);
+                }
+                else {
+                    logger.info("Invalid input! Try again!");
+                    continue;
+                }
+
+                logger.info("Choose how many you want ");
+                totalProduct = scannerInput.nextInt();
+
+                if(totalProduct <= product.getStock())
+                {
+                    orderItem.setTotal(totalProduct);
+                    orderItem.setProductID(product.getProductID());
+                    product.setStock(product.getStock() - totalProduct);
+                    productRepository.updateProductToDb(product);
+
+                    orderList.add(orderItem);
+
+                    orderCost = orderCost.add(product.getPrice().multiply(BigDecimal.valueOf(totalProduct)));
+                }
+                else
+                {
+                    logger.info("Not enough in stock.");
+                    logger.info("You ordered {} {} but there are only {} in stock",totalProduct, product.getProductName(), product.getStock());
+                }
+
+                scannerInput.nextLine();
+                logger.info("A) Add more products B) Place order!");
+                userInput = scannerInput.nextLine();
+
+                if(userInput.toLowerCase().equals("b"))
+                    break;
             }
-            else if (userInput.toLowerCase().equals("a")) {
-                logger.info("Enter product name");
-                String productName = scannerInput.nextLine();
-                //get rest from DB
-                product  = productRepository.getProductFromName(productName);
+            //does not always catch the exception
+            catch (InputMismatchException throwable) {
+                String mismatch = scannerInput.next();
+                logger.info("mismatch: {}",mismatch);
+                scannerInput.nextLine();
+                continue;
             }
-            else {
-                logger.info("Invalid input! Try again!");
-                break;
-            }
-
-            logger.info("Choose how many you want ");
-            totalProduct = scannerInput.nextInt();
-
-            if(totalProduct <= product.getStock())
-            {
-                orderItem.setTotal(totalProduct);
-                orderItem.setProductID(product.getProductID());
-                product.setStock(product.getStock() - totalProduct);
-                productRepository.updateProductToDb(product);
-
-                orderList.add(orderItem);
-
-                orderCost = orderCost.add(product.getPrice().multiply(BigDecimal.valueOf(totalProduct)));
-            }
-            else
-            {
-                logger.info("Not enough in stock.");
-                logger.info("You ordered {} {} but there are only {} in stock",totalProduct, product.getProductName(), product.getStock());
-            }
-
-            scannerInput.nextLine();
-            logger.info("A) Add more products B) Place order!");
-            userInput = scannerInput.nextLine();
-
-            if(userInput.toLowerCase().equals("b"))
-                break;
-
         }
 
         order.setOrderList(orderList);
@@ -131,7 +141,7 @@ public class OrderService implements OrderServiceInterface {
             double discount = (double)totalDiscount / 100;
 
             orderCost = orderCost.multiply(BigDecimal.valueOf(1-discount));
-            logger.info("Your discount is: {}, so the final order cost is: {} €", totalDiscount,orderCost);
+            logger.info("Your discount is: {}%, so the final order cost is: {} €", totalDiscount,orderCost);
             order.setCost(orderCost);
             orderRepository.saveOrderToDB(order);
             logger.info("Order {}", order);
