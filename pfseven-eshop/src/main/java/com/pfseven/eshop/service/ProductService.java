@@ -58,6 +58,7 @@ public class ProductService implements ProductServiceInterface {
     public void editProduct()  {
         Scanner in = new Scanner(System.in);
         Product product = new Product();
+        product.setProductID(0);
         Scanner scannerInput = new Scanner(System.in);
         int error =0;
 
@@ -71,7 +72,7 @@ public class ProductService implements ProductServiceInterface {
             logger.error("WRONG ID input...{}",e.toString());
             error=-1;
             scannerInput.nextLine();
-        }if(error!=-1) {
+        }if(error!=-1&& product.getProductID()!=-1 ) {
               //request product from database
             // logger.info("The editing product : {}", product);
             logger.info("Enter product name ");
