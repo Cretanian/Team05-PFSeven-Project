@@ -1,16 +1,14 @@
 package com.pfseven.eshop.service;
 
 import com.pfseven.eshop.classinterface.OrderServiceInterface;
-import com.pfseven.eshop.database.CustomerRepository;
-import com.pfseven.eshop.database.OrderRepository;
-import com.pfseven.eshop.database.ProductRepository;
+import com.pfseven.eshop.database.*;
+
 import com.pfseven.eshop.model.*;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -21,17 +19,19 @@ public class OrderService implements OrderServiceInterface {
     private OrderRepository orderRepository ;
     private ProductRepository productRepository;
     private CustomerRepository customerRepository;
+    private OrderItemRepository orderItemRepository;
 
-    public  OrderService(OrderRepository orderRepository,ProductRepository productRepository, CustomerRepository customerRepository) {
+    public  OrderService(OrderRepository orderRepository,ProductRepository productRepository, CustomerRepository customerRepository,OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.customerRepository = customerRepository;
+        this.orderItemRepository =  orderItemRepository;
     }
 
     public void newOrderInput(Order newOrder, int customerID) {
 
         Order order = new Order();
-        Customer customer = new Customer();
+        Customer customer;
         customer = customerRepository.getCustomerFromID(customerID);
         ArrayList <OrderItem> orderList = new ArrayList<>();
         Scanner scannerInput = new Scanner(System.in);
@@ -51,6 +51,11 @@ public class OrderService implements OrderServiceInterface {
                 userInput = scannerInput.nextLine();
                 if(userInput.toLowerCase().equals("a")) {
                     logger.info("Enter product ID");
+                    try{
+                        product.setProductID(scannerInput.nextInt());
+                    }   catch (InputMismatchException mismatchException){
+                        logger.error("Wrong price input {}",mismatchException.toString());
+                    }
                     product.setProductID(scannerInput.nextInt());
                     //get rest from DB  //getProductFromID
                     product  = productRepository.getProductFromID(product.getProductID());
@@ -80,7 +85,7 @@ public class OrderService implements OrderServiceInterface {
                     orderItem.setProductID(product.getProductID());
                     product.setStock(product.getStock() - totalProduct);
                     productRepository.updateProductToDb(product);
-
+                    orderItemRepository.saveOrderItemToDB(orderItem);
                     orderList.add(orderItem);
 
                     orderCost = orderCost.add(product.getPrice().multiply(BigDecimal.valueOf(totalProduct)));

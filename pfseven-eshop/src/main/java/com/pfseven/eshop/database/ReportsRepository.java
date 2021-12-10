@@ -136,11 +136,22 @@ public class ReportsRepository {
 
    //fourth report
    public ResultSet GoldenCustomer() throws SQLException {
+       PreparedStatement statement = this.connection.prepareStatement
+               ("SELECT MAX(PRODUCT.PRICE)" +
+                       "FROM PRODUCT JOIN ProductOrder ON PRODUCTORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID  ");
 
-            PreparedStatement statement = this.connection.prepareStatement("SELECT CUSTOMER.CUSTOMER_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME, PRODUCT.PRICE, PRODUCTORDER.QUANTITY FROM CUSTOMER JOIN ORDERS ON CUSTOMER.CUSTOMER_ID = ORDERS.CUSTOMER_ID  JOIN PRODUCTORDER ON ORDERS.ORDER_ID = PRODUCTORDER.ORDER_ID JOIN  PRODUCT ON PRODUCTORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID  WHERE  PRODUCT.PRICE = (SELECT MAX(PRODUCT.PRICE) FROM PRODUCT)");
-            ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            return resultSet;
+       ResultSet resultSet = statement.executeQuery();
+       resultSet.next();
+
+       statement = this.connection.prepareStatement
+                    ("SELECT CUSTOMER.CUSTOMER_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME, PRODUCT.PRICE, PRODUCTORDER.QUANTITY " +
+                            "FROM CUSTOMER JOIN ORDERS ON CUSTOMER.CUSTOMER_ID = ORDERS.CUSTOMER_ID  " +
+                            "JOIN PRODUCTORDER ON ORDERS.ORDER_ID = PRODUCTORDER.ORDER_ID " +
+                            "JOIN  PRODUCT ON PRODUCTORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID  " +
+                            "WHERE  PRODUCT.PRICE = " + resultSet.getString(1));
+
+       resultSet = statement.executeQuery();
+       resultSet.next();
+       return resultSet;
    }
-
 }

@@ -20,7 +20,7 @@ public class Main {
        DatabasePF7Project controller = new DatabasePF7Project();
        controller.startServer();
        controller.createDBConnection();
-//       controller.initializeDB();
+       controller.initializeDB();
 
 
         ProductRepository productRepository = new ProductRepository(controller.getDBConnection());
@@ -29,8 +29,10 @@ public class Main {
         CustomerRepository customerRepository = new CustomerRepository(controller.getDBConnection());
         CustomerService customerService = new CustomerService(customerRepository);
 
+
+        OrderItemRepository orderItemRepository = new OrderItemRepository(controller.getDBConnection());
         OrderRepository orderRepository = new OrderRepository(controller.getDBConnection());
-        OrderService newOrderInput = new OrderService(orderRepository, productRepository, customerRepository);
+        OrderService newOrderInput = new OrderService(orderRepository, productRepository, customerRepository,orderItemRepository);
 
 
         ReportsRepository reportsRepository = new ReportsRepository(controller.getDBConnection());
@@ -80,14 +82,17 @@ public class Main {
         while (!userInput.toLowerCase().equals("c")) {
             logger.info("A) Add new product  B) Edit existing product C) Back");
             userInput = scannerInput.nextLine();
-            switch (userInput.toLowerCase()) {                            //check statement later
+            switch (userInput.toLowerCase()) {
                 case "a":
+                case "A":
                     productService.newProductInput();
                     break;
                 case "b":
+                case "B":
                     productService.editProduct();
                     break;
                 case "c":
+                case "C":
                     logger.info("...");
                     break;
                 default:
@@ -132,7 +137,7 @@ public class Main {
 
         //if (newOrder.getPending() = )
 
-        if (customerID != -2) {
+        if (customerID > 0) {
             newOrder.setCustomerID(customerID);
             orderService.newOrderInput(newOrder,customerID);
         }

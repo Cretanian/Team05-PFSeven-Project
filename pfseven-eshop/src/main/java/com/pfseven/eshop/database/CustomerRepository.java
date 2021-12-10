@@ -3,7 +3,6 @@ package com.pfseven.eshop.database;
 import com.pfseven.eshop.classinterface.CustomerRepositoryInterface;
 import com.pfseven.eshop.model.CategoryID;
 import com.pfseven.eshop.model.Customer;
-import com.pfseven.eshop.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

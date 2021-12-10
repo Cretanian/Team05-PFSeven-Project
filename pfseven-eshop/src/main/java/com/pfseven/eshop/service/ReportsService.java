@@ -64,7 +64,6 @@ public class ReportsService {
         logger.info("Total number of purchases using WIRE_TRANSFER is {} with {} cost ",number,cost);
     }
 
-
     //fourth report
     public void getGoldenCustomer() throws SQLException {
         ResultSet resultSet = reportsRepository.GoldenCustomer();
