@@ -68,15 +68,15 @@ public class ReportsService {
     //fourth report
     public void getGoldenCustomer() throws SQLException {
         ResultSet resultSet = reportsRepository.GoldenCustomer();
-//        do {
-//            int customerID = resultSet.getInt(1);
-//            String firstName = resultSet.getString(2);
-//            String lastName = resultSet.getString(3);
-//            BigDecimal price = resultSet.getBigDecimal(4);
-////            Integer quantity = resultSet.getInt(5);
-//
-//            logger.info("{} {} with id {} has purchased the most expensive product({}$) so far!", firstName, lastName, customerID, price);
-//        }while(resultSet.next());
+        do {
+            int customerID = resultSet.getInt(1);
+            String firstName = resultSet.getString(2);
+            String lastName = resultSet.getString(3);
+            BigDecimal price = resultSet.getBigDecimal(4);
+            Integer quantity = resultSet.getInt(5);
+
+            logger.info("{} {} with id {} has purchased the most expensive product({}$) {} times so far!", firstName, lastName, customerID, price, quantity);
+        }while(resultSet.next());
     }
 
 }

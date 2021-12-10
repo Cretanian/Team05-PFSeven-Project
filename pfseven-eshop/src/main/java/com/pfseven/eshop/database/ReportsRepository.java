@@ -135,18 +135,12 @@ public class ReportsRepository {
     }
 
    //fourth report
-   public ResultSet GoldenCustomer() {
+   public ResultSet GoldenCustomer() throws SQLException {
 
-        try(PreparedStatement statement = this.connection.prepareStatement("SELECT CUSTOMER.CUSTOMER_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME, PRODUCT.PRICE FROM CUSTOMER JOIN ORDERS ON CUSTOMER.CUSTOMER_ID = ORDERS.CUSTOMER_ID  JOIN PRODUCTORDER ON ORDERS.ORDER_ID = PRODUCTORDER.ORDER_ID JOIN  PRODUCT ON PRODUCTORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID  WHERE  PRODUCT.PRICE = (SELECT MAX(PRODUCT.PRICE) FROM PRODUCT)");) {
+            PreparedStatement statement = this.connection.prepareStatement("SELECT CUSTOMER.CUSTOMER_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME, PRODUCT.PRICE, PRODUCTORDER.QUANTITY FROM CUSTOMER JOIN ORDERS ON CUSTOMER.CUSTOMER_ID = ORDERS.CUSTOMER_ID  JOIN PRODUCTORDER ON ORDERS.ORDER_ID = PRODUCTORDER.ORDER_ID JOIN  PRODUCT ON PRODUCTORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID  WHERE  PRODUCT.PRICE = (SELECT MAX(PRODUCT.PRICE) FROM PRODUCT)");
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            resultSet.
             return resultSet;
-        }
-        catch (SQLException e) {
-            logger.error("Error: {}",e.toString());
-            return null;
-        }
    }
 
 }
