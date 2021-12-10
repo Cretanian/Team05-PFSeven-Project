@@ -24,32 +24,29 @@ public class CustomerService implements CustomerServiceInterface {
         Scanner in = new Scanner(System.in);
         Integer customerID = -1;
 
-        logger.info("Enter user first name ");
+        logger.info("Enter customer's first name ");
         customer.setFirstName(in.nextLine());
-        logger.info("Enter user last name ");
+        logger.info("Enter customer's last name ");
         customer.setLastName(in.nextLine());
         label:
         do {
-            logger.info("Enter user Category ID: one of the following B2B, B2C, B2G ");
+            logger.info("Enter customer's Category ID (B2B, B2C or B2G:)");
             String string = in.nextLine();
-            switch (string) {
-                case "B2B":
+            switch (string.toLowerCase()) {
                 case "b2b":
                     customer.setCategoryID(CategoryID.B2B);
                     break label;
-                case "B2C":
                 case "b2c":
                     customer.setCategoryID(CategoryID.B2C);
                     break label;
-                case "B2G":
                 case "b2g":
                     customer.setCategoryID(CategoryID.B2G);
                     break label;
             }
-            logger.info("WRONG ... Try again...");
+            logger.info("Invalid input! Try again!");
         }while(true);
 
-        logger.info("Customer name {} {} , with categoryID {}", customer.getFirstName(), customer.getLastName(), customer.getCategoryID());
+        logger.info("Ordering for {} {}(categoryID:{})...", customer.getFirstName(), customer.getLastName(), customer.getCategoryID());
 
         //add customer to db
         customerRepository.insertNewCustomer(customer);
@@ -66,7 +63,7 @@ public class CustomerService implements CustomerServiceInterface {
 
         logger.info("A) Get customer from customer ID  B) Get customer from name");
 
-        if(scannerInput.nextLine().equals("A")){
+        if(scannerInput.nextLine().toLowerCase().equals("a")){
             logger.info("Enter ID");
             return scannerInput.nextInt();
         }

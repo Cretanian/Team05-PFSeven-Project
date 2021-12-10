@@ -17,7 +17,7 @@ public class DatabasePF7Project {
 
    private static final Logger logger = LoggerFactory.getLogger(DatabasePF7Project.class);
 
-   private static final String DB_CONNECTION_URL_FILE_MODE = "jdbc:h2:C:/Users/spyro/IdeaProjects/Team05-PFSeven-Project/databasePF7Shop";
+   private static final String DB_CONNECTION_URL_FILE_MODE = "jdbc:h2:C:/Users/TURBOX/IdeaProjects/Team05-PFSeven-Project/databasePF7Shop";
    private static final String DB_USERNAME = "admin";
    private static final String DB_PASSWORD = "admin123";
 
@@ -64,12 +64,12 @@ public class DatabasePF7Project {
    public void initializeDB() throws SQLException {
     Statement statement = this.getDBConnection().createStatement();
 
-//      String sql ="ALTER TABLE ORDERS ADD cost NUMERIC(6,2)";
+      String sql ="ALTER TABLE ORDERS ADD cost NUMERIC(6,2)";
 
 
-//      int databaseCreation = statement.executeUpdate(sql);
-//
-//      logger.info("Create tables was successful with productTable {}.", databaseCreation);
+      int databaseCreation = statement.executeUpdate(sql);
+
+      logger.info("Create tables was successful with productTable {}.", databaseCreation);
 
 //      String sql = "CREATE TABLE Category (" +
 //              " category_ID INTEGER not NULL AUTO_INCREMENT," +

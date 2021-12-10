@@ -41,24 +41,31 @@ public class OrderService implements OrderServiceInterface {
         order.setCustomerID(customerID);
         BigDecimal orderCost = new BigDecimal("0");
 
-        while(true){
+        while(true) {
 
             OrderItem orderItem = new OrderItem();
             Product product = new Product();
             logger.info("A) Get product from product ID  B) Get product from name");
             userInput = scannerInput.nextLine();
-            if(userInput.equals("A")){
+            if(userInput.toLowerCase().equals("a")) {
                 logger.info("Enter product ID");
                 product.setProductID(scannerInput.nextInt());
                 //get rest from DB  //getProductFromID
-             product  = productRepository.getProductFromID(product.getProductID());
+                product  = productRepository.getProductFromID(product.getProductID());
+//                if (product.getProductID() == -1) {
+//                    logger.info("There is no such product! Try again!");
+//                    continue;
+//                }
             }
-            else
-            {
+            else if (userInput.toLowerCase().equals("a")) {
                 logger.info("Enter product name");
                 String productName = scannerInput.nextLine();
                 //get rest from DB
                 product  = productRepository.getProductFromName(productName);
+            }
+            else {
+                logger.info("Invalid input! Try again!");
+                break;
             }
 
             logger.info("Choose how many you want ");
@@ -85,7 +92,7 @@ public class OrderService implements OrderServiceInterface {
             logger.info("A) Add more products B) Place order!");
             userInput = scannerInput.nextLine();
 
-            if(userInput.equals("B"))
+            if(userInput.toLowerCase().equals("b"))
                 break;
 
         }
@@ -97,17 +104,16 @@ public class OrderService implements OrderServiceInterface {
         do {
             logger.info("Enter Payment Method: one of the following CASH, CREDIT_CARD, WIRE_TRANSFER");
             userInput = scannerInput.nextLine();
-            switch (userInput) {
-                case "CASH":
+            switch (userInput.toLowerCase()) {
                 case "cash":                         //to do cases
                     order.setPaymentMethod(PaymentMethod.CASH);
                     break label;
-                case "CREDIT_CARD":
                 case "credit_card":
+                case "credit card":
                     order.setPaymentMethod(PaymentMethod.CREDIT_CARD);
                     break label;
-                case "WIRE_TRANSFER":
                 case "wire_transfer":
+                case "wire transfer":
                     order.setPaymentMethod(PaymentMethod.WIRE_TRANSFER);
                     break label;
             }

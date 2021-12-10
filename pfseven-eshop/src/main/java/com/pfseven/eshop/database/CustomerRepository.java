@@ -40,63 +40,80 @@ public class CustomerRepository implements CustomerRepositoryInterface {
         }
     }
 
-    public void insertNewCustomer (Customer newCustomer) throws SQLException {
-        PreparedStatement statement = this.connection.prepareStatement("INSERT INTO CUSTOMER(CUSTOMER_ID,FIRST_NAME,LAST_NAME,CATEGORY_ID) VALUES(NULL,?,?,?)");
-        statement.setString(1, newCustomer.getFirstName());
-        statement.setString(2, newCustomer.getLastName());
-        int categoryID = convertCategoryIDToInt(newCustomer.getCategoryID());
-        statement.setString(3, String.valueOf(categoryID));
-        statement.executeUpdate();
+    public void insertNewCustomer (Customer newCustomer) {
+
+        try(PreparedStatement statement = this.connection.prepareStatement("INSERT INTO CUSTOMER(CUSTOMER_ID,FIRST_NAME,LAST_NAME,CATEGORY_ID) VALUES(NULL,?,?,?)")) {
+            statement.setString(1, newCustomer.getFirstName());
+            statement.setString(2, newCustomer.getLastName());
+            int categoryID = convertCategoryIDToInt(newCustomer.getCategoryID());
+            statement.setString(3, String.valueOf(categoryID));
+            statement.executeUpdate();
+        }
+        catch (SQLException throwable) {
+            throwable.printStackTrace();
+        }
     }
 
-    public Customer getCustomerFromID(int customerID) throws SQLException {
+    public Customer getCustomerFromID(int customerID) {
         Customer existedCustomer = new Customer();
 
-        PreparedStatement statement = this.connection.prepareStatement("SELECT * FROM CUSTOMER WHERE(CUSTOMER_ID = ?)");
-        statement.setString(1, String.valueOf(customerID));
-        ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
+        try(PreparedStatement statement = this.connection.prepareStatement("SELECT * FROM CUSTOMER WHERE(CUSTOMER_ID = ?)")) {
+            statement.setString(1, String.valueOf(customerID));
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
 
-        existedCustomer.setFirstName(resultSet.getString("first_name"));
-        existedCustomer.setLastName(resultSet.getString("last_name"));
+            existedCustomer.setFirstName(resultSet.getString("first_name"));
+            existedCustomer.setLastName(resultSet.getString("last_name"));
 
-        CategoryID categoryID = convertIntToCategoryID(resultSet.getInt("category_id"));
-        existedCustomer.setCategoryID(categoryID);
+            CategoryID categoryID = convertIntToCategoryID(resultSet.getInt("category_id"));
+            existedCustomer.setCategoryID(categoryID);
 
-        existedCustomer.setCustomerID(customerID);
-
+            existedCustomer.setCustomerID(customerID);
+        }
+        catch (SQLException throwable) {
+            throwable.printStackTrace();
+            existedCustomer.setCustomerID(-1);
+        }
         return existedCustomer;
     }
 
-    public Customer getCustomerFromName(String firstName, String lastName) throws SQLException {
+    public Customer getCustomerFromName(String firstName, String lastName) {
         Customer existedCustomer = new Customer();
 
-        PreparedStatement statement = this.connection.prepareStatement("SELECT * FROM CUSTOMER WHERE(FIRST_NAME = ? AND LAST_NAME = ?)");
-        statement.setString(1, String.valueOf(firstName));
-        statement.setString(2, String.valueOf(lastName));
-        ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
+        try(PreparedStatement statement = this.connection.prepareStatement("SELECT * FROM CUSTOMER WHERE(FIRST_NAME = ? AND LAST_NAME = ?)")) {
+            statement.setString(1, String.valueOf(firstName));
+            statement.setString(2, String.valueOf(lastName));
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
 
-        existedCustomer.setFirstName(resultSet.getString("first_name"));
-        existedCustomer.setLastName(resultSet.getString("last_name"));
-        existedCustomer.setCustomerID(resultSet.getInt("customer_id"));
+            existedCustomer.setFirstName(resultSet.getString("first_name"));
+            existedCustomer.setLastName(resultSet.getString("last_name"));
+            existedCustomer.setCustomerID(resultSet.getInt("customer_id"));
 
-        CategoryID categoryID = convertIntToCategoryID(resultSet.getInt("category_id"));
-        existedCustomer.setCategoryID(categoryID);
+            CategoryID categoryID = convertIntToCategoryID(resultSet.getInt("category_id"));
+            existedCustomer.setCategoryID(categoryID);
 
-        System.out.println("customer's id is " + existedCustomer.getCustomerID());
-
+            System.out.println("customer's id is " + existedCustomer.getCustomerID());
+        }
+        catch (SQLException throwable) {
+            throwable.printStackTrace();
+            existedCustomer.setCustomerID(-1);
+        }
         return existedCustomer;
-
     }
 
-    public int findMaxID() throws SQLException {
-        PreparedStatement statement = this.connection.prepareStatement("SELECT MAX(CUSTOMER_ID) FROM CUSTOMER");
-        ResultSet resultSet = statement.executeQuery();
+    public int findMaxID() {
+        int id;
 
-        resultSet.next();
-        int id = resultSet.getInt(1);
-
+        try(PreparedStatement statement = this.connection.prepareStatement("SELECT MAX(CUSTOMER_ID) FROM CUSTOMER")) {
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            id = resultSet.getInt(1);
+        }
+        catch (SQLException throwable) {
+            throwable.printStackTrace();
+            id = -1;
+        }
         return id;
     }
 

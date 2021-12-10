@@ -20,7 +20,7 @@ public class Main {
        DatabasePF7Project controller = new DatabasePF7Project();
        controller.startServer();
        controller.createDBConnection();
-       //controller.initializeDB();
+//       controller.initializeDB();
 
 
         ProductRepository productRepository = new ProductRepository(controller.getDBConnection());
@@ -41,28 +41,28 @@ public class Main {
         Scanner scannerInput = new Scanner(System.in);
 
         while (!userInput.equals("4")) {
-            logger.info("Choose one number of the following categories!");
+            logger.info("Select one of the following actions:");
             logger.info("1) Place order  2) Edit Products  3) Get Reports  4) Terminate");
             userInput = scannerInput.nextLine();
             switch (userInput) {
                 case "1":
-                    logger.info("Starting order!");
+                    logger.info("Starting order...");
                     placeOrder(newOrderInput,customerService);
                     break;
                 case "2":
-                    logger.info("Editing product!");
+                    logger.info("Editing product...");
                     chooseProductAction(productService);
                     break;
                 case "3":
-                    logger.info("Getting reports!");
+                    logger.info("Getting reports...");
                     getReports(reportsService,customerService);
                     //method
                     break;
                 case "4":
-                    logger.info("Later!!!");
+                    logger.info("Terminated!");
                     System.exit(0);
                 default:
-                    logger.info("Wrong input.. Try again..");
+                    logger.info("Invalid input! Try again!");
             }
         }
 
@@ -77,21 +77,21 @@ public class Main {
         String userInput = "";
 
 
-        while (!userInput.equals("C")) {
-            logger.info("A) Add new product  B) Edit existing product C) Kill me plz");
+        while (!userInput.toLowerCase().equals("c")) {
+            logger.info("A) Add new product  B) Edit existing product C) Back");
             userInput = scannerInput.nextLine();
-            switch (userInput) {                            //check statement later
-                case "A":
+            switch (userInput.toLowerCase()) {                            //check statement later
+                case "a":
                     productService.newProductInput();
                     break;
-                case "B":
+                case "b":
                     productService.editProduct();
                     break;
-                case "C":
-                    logger.info("Thank you kind sir!");
+                case "c":
+                    logger.info("...");
                     break;
                 default:
-                    logger.info("Wrong input.. Try again..");
+                    logger.info("Invalid input! Try again!");
             }
         }
     }
@@ -104,21 +104,21 @@ public class Main {
 
         while (customerID == -1) {
             logger.info("Select customer:");
-            logger.info("A) Add new customer  B) Get existing customer C) Kill me plz");
+            logger.info("A) Add new customer  B) Get existing customer C) Back");
             userInput = scannerInput.nextLine();
-            switch (userInput) {
-                case "A":
+            switch (userInput.toLowerCase()) {
+                case "a":
                     customerID = customerService.newCustomerInput();
                     break;
-                case "B":
+                case "b":
                     customerID = customerService.getCustomerIDfromDB();
                     break;
-                case "C":
-                    logger.info("Thank you kind sir!");
+                case "c":
+                    logger.info("...");
                     customerID = -2;
                     break;
                 default:
-                    logger.info("Wrong input.. Try again..");
+                    logger.info("Invalid input! Try again!");
             }
         }
         return customerID;
@@ -143,31 +143,31 @@ public class Main {
             Scanner scannerInput = new Scanner(System.in);
             String userInput = "";
 
-            while (!userInput.equals("E")) {
-                logger.info("A) Get total number and cost of purchases for a particual customer" +
+            while (!userInput.toLowerCase().equals("e")) {
+                logger.info("A) Get total number and cost of purchases for a particular customer" +
                         "  B) Get total number and cost of purchases per customer category" +
                         "  C) Get total number and cost of purchases per payment method" +
                         "  D) Get the customer(s) who purchased the most expensive product and how many times" +
                         "  E) Terminate");
 
                 userInput = scannerInput.nextLine();
-                switch (userInput) {                            //check statement later
-                    case "A":
+                switch (userInput.toLowerCase()) {                            //check statement later
+                    case "a":
                         getFirstReport(customerService,reportsService);
                         break;
-                    case "B":
-                        getSecondReport();
+                    case "b":
+                        getSecondReport(reportsService);
                         break;
-                    case "C":
-                        getThirdReport ();
+                    case "c":
+                        getThirdReport (reportsService);
                         break;
-                    case "D":
-                        getFourthReport ();
+                    case "d":
+                        getFourthReport (reportsService);
                         break;
-                    case "E":
+                    case "e":
                         break;
                     default:
-                        logger.info("Wrong input.. Try again..");
+                        logger.info("Invalid input! Try again!");
                 }
             }
     }
@@ -180,15 +180,31 @@ public class Main {
         //Integer customerID = getCustomerID(customerService);
     }
 
-    private static void getSecondReport () {
+    private static void getSecondReport (ReportsService reportsService) throws SQLException {
+
+        Scanner scannerInput = new Scanner(System.in);
+        String category = null;
+        logger.info("Select category:");
+        category = scannerInput.nextLine();
+
+        reportsService.getNumberAndCostOfPurchasesForCategory(category);
+    }
+
+    private static void getThirdReport (ReportsService reportsService) throws SQLException {
+
+        Scanner scannerInput = new Scanner(System.in);
+        String paymentMethod = null;
+        logger.info("Select payment method:");
+        paymentMethod = scannerInput.nextLine();
+
+        reportsService.getNumberAndCostOfPurchasesForPaymentMethod(paymentMethod);
 
     }
 
-    private static void getThirdReport () {
+    private static void getFourthReport (ReportsService reportsService) throws SQLException {
+
+        reportsService.getGoldenCustomer();
 
     }
 
-    private static void getFourthReport () {
-
-    }
 }
