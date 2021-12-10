@@ -34,60 +34,49 @@ public class ReportsService {
 
     }
     //second report
-    public void getNumberAndCostOfPurchasesForCategory(String category) throws SQLException {
-        Integer categoryID;
+    public void getNumberAndCostOfPurchasesForCustomerCategory()  {
+        int number = reportsRepository.totalNumberOfOrdersPerCategory(CategoryID.B2C);
+        BigDecimal cost = reportsRepository.totalCostOfOrdersPerCategory(CategoryID.B2C);
+        logger.info("Total number of purchases is {} with {} cost for the B2C",number,cost);
 
-        switch (category.toLowerCase()) {
-            case "b2b":
-                categoryID = 1; break;
-            case "b2c":
-                categoryID = 2; break;
-            case "b2g":
-                categoryID = 3; break;
-            default:
-                categoryID = -1;
-        }
+        number = reportsRepository.totalNumberOfOrdersPerCategory(CategoryID.B2B);
+        cost = reportsRepository.totalCostOfOrdersPerCategory(CategoryID.B2B);
+        logger.info("Total number of purchases is {} with {} cost for the B2B",number,cost);
 
-        int number = reportsRepository.totalNumberOfOrdersForCategory(categoryID);
-        BigDecimal cost = reportsRepository.totalCostOfPurchasesForCategory(categoryID);
-
-        logger.info("There have been {} orders from {}-customers with total cost : {}$", number, category, cost);
+        number = reportsRepository.totalNumberOfOrdersPerCategory(CategoryID.B2G);
+        cost = reportsRepository.totalCostOfOrdersPerCategory(CategoryID.B2G);
+        logger.info("Total number of purchases is {} with {} cost for the B2G",number,cost);
     }
+//    logger.info("There have been {} orders from {}-customers with total cost : {}$", number, category, cost);
 
     //third report
-    public void getNumberAndCostOfPurchasesForPaymentMethod(String paymentMethod) throws SQLException {
-        Integer paymentMethodID;
+    public void getNumberAndCostOfPurchasesPerPaymentMethod()  {
+        int number = reportsRepository.totalNumberOfOrdersPerPaymentMethod(PaymentMethod.CASH);
+        BigDecimal cost = reportsRepository.totalCostOfOrdersPerPaymentMethod(PaymentMethod.CASH);
+        logger.info("Total number of purchases using CASH is {} with {} cost ",number,cost);
 
-        switch (paymentMethod.toLowerCase()) {
-            case "cash":
-                paymentMethodID = 1; break;
-            case "credit card":
-            case "credit_card":
-                paymentMethodID = 2; break;
-            case "wire transfer":
-            case "wire_transfer":
-                paymentMethodID = 3; break;
-            default:
-                paymentMethodID = -1;
-        }
+        number = reportsRepository.totalNumberOfOrdersPerPaymentMethod(PaymentMethod.CREDIT_CARD);
+        cost = reportsRepository.totalCostOfOrdersPerPaymentMethod(PaymentMethod.CREDIT_CARD);
+        logger.info("Total number of purchases using CREDIT_CARD is {} with {} cost ",number,cost);
 
-        int number = reportsRepository.totalNumberOfOrdersForPaymentMethod(paymentMethodID);
-        BigDecimal cost = reportsRepository.totalCostOfPurchasesForPaymentMethod(paymentMethodID);
-
-        logger.info("There have been {} orders via {} with total cost : {}$", number, paymentMethod, cost);
+        number = reportsRepository.totalNumberOfOrdersPerPaymentMethod(PaymentMethod.WIRE_TRANSFER);
+        cost = reportsRepository.totalCostOfOrdersPerPaymentMethod(PaymentMethod.WIRE_TRANSFER);
+        logger.info("Total number of purchases using WIRE_TRANSFER is {} with {} cost ",number,cost);
     }
+
 
     //fourth report
     public void getGoldenCustomer() throws SQLException {
         ResultSet resultSet = reportsRepository.GoldenCustomer();
-
-        resultSet.next();
-        int customerID = resultSet.getInt(1);
-        String firstName = resultSet.getString(2);
-        String lastName = resultSet.getString(3);
-        BigDecimal price = resultSet.getBigDecimal(4);
-
-        logger.info("{} {} with id {} has purchased the most expensive product({}$) so far!", firstName, lastName, customerID, price);
-        }
+//        do {
+//            int customerID = resultSet.getInt(1);
+//            String firstName = resultSet.getString(2);
+//            String lastName = resultSet.getString(3);
+//            BigDecimal price = resultSet.getBigDecimal(4);
+////            Integer quantity = resultSet.getInt(5);
+//
+//            logger.info("{} {} with id {} has purchased the most expensive product({}$) so far!", firstName, lastName, customerID, price);
+//        }while(resultSet.next());
+    }
 
 }

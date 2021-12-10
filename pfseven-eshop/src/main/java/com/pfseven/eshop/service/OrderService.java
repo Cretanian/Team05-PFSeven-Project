@@ -98,7 +98,6 @@ public class OrderService implements OrderServiceInterface {
                 if(userInput.toLowerCase().equals("b"))
                     break;
             }
-            //does not always catch the exception
             catch (InputMismatchException throwable) {
                 String mismatch = scannerInput.next();
                 logger.info("mismatch: {}",mismatch);
@@ -133,7 +132,7 @@ public class OrderService implements OrderServiceInterface {
 
         //add to DB
         if (!order.getOrderList().isEmpty()) {
-            logger.info("Order cost without discount is: {} €",orderCost);
+            logger.info("Order cost without discount is: {}€",orderCost);
 
             int paymentMethodDiscount = paymentMethodDiscount(order.getPaymentMethod());
             int categoryIDDiscount = categoryIDDiscount(customer.getCategoryID());
@@ -141,7 +140,7 @@ public class OrderService implements OrderServiceInterface {
             double discount = (double)totalDiscount / 100;
 
             orderCost = orderCost.multiply(BigDecimal.valueOf(1-discount));
-            logger.info("Your discount is: {}%, so the final order cost is: {} €", totalDiscount,orderCost);
+            logger.info("Your discount is: {}%, so the final order cost is: {}€", totalDiscount,orderCost);
             order.setCost(orderCost);
             orderRepository.saveOrderToDB(order);
             logger.info("Order {}", order);

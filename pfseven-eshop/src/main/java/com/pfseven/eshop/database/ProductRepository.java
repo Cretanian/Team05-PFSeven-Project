@@ -2,10 +2,13 @@ package com.pfseven.eshop.database;
 
 import com.pfseven.eshop.classinterface.ProductRepositoryInterface;
 import com.pfseven.eshop.model.Product;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
 public class ProductRepository implements ProductRepositoryInterface {
+   private static final Logger logger = LoggerFactory.getLogger(ProductRepository.class);
    private Connection connection;
 
 
@@ -26,7 +29,7 @@ public class ProductRepository implements ProductRepositoryInterface {
          product.setStock(resultSet.getInt(4));
       }
       catch (SQLException throwable) {
-         throwable.printStackTrace();
+         logger.error("Error: {}",throwable.toString());
          product.setProductID(-1);
       }
      return product;
@@ -39,14 +42,13 @@ public class ProductRepository implements ProductRepositoryInterface {
          statement.setString(1, name);
          ResultSet resultSet =  statement.executeQuery();
          resultSet.next();
-         //resultSet.beforeFirst();
          product.setProductID(resultSet.getInt(1));
          product.setProductName(resultSet.getString(2));
          product.setPrice(resultSet.getBigDecimal(3));
          product.setStock(resultSet.getInt(4));
       }
       catch (SQLException throwable) {
-         throwable.printStackTrace();
+         logger.error("Error: {}",throwable.toString());
          product.setProductID(-1);
       }
       return product;
@@ -54,20 +56,20 @@ public class ProductRepository implements ProductRepositoryInterface {
 
    public void insertProductToDb(Product product) {
 
-      try(PreparedStatement statement = this.connection.prepareStatement("INSERT INTO PRODUCT (product_ID,productName,price,stock) VALUES ( NULL, ?, ?, ? ) ")) {
+      try(PreparedStatement statement = this.connection.prepareStatement("INSERT INTO PRODUCT (product_ID,productName,price,stock) VALUES (NULL, ?, ?, ?)")) {
          statement.setString(1, product.getProductName());
          statement.setBigDecimal(2, product.getPrice());
          statement.setInt(3, product.getStock());
          statement.executeUpdate();
       }
       catch (SQLException throwable) {
-         throwable.printStackTrace();
+         logger.error("Error: {}",throwable.toString());
       }
    }
 
    public void updateProductToDb(Product product) {
 
-      try(PreparedStatement statement = this.connection.prepareStatement("UPDATE PRODUCT SET PRODUCTNAME = ?,PRICE=? ,STOCK=?     WHERE product_ID=?")) {
+      try(PreparedStatement statement = this.connection.prepareStatement("UPDATE PRODUCT SET PRODUCTNAME = ?,PRICE=? ,STOCK=? WHERE product_ID=?")) {
          statement.setString(1, product.getProductName());
          statement.setBigDecimal(2, product.getPrice());
          statement.setInt(3, product.getStock());
@@ -75,7 +77,7 @@ public class ProductRepository implements ProductRepositoryInterface {
          statement.executeUpdate();
       }
       catch (SQLException throwable) {
-         throwable.printStackTrace();
+         logger.error("Error: {}",throwable.toString());
       }
    }
 }

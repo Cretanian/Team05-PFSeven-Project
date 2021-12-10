@@ -1,19 +1,20 @@
 package com.pfseven.eshop.database;
 
-import com.pfseven.eshop.model.CategoryID;
 import com.pfseven.eshop.model.Order;
 import com.pfseven.eshop.model.PaymentMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class OrderRepository {
+    private static final Logger logger = LoggerFactory.getLogger(OrderRepository.class);
     private Connection connection;
 
-    public OrderRepository(Connection connection){
+    public OrderRepository(Connection connection) {
         this.connection = connection;
-
     }
     public int convertPaymentMethodToInt(PaymentMethod paymentMethod) {
         switch (paymentMethod) {
@@ -28,18 +29,6 @@ public class OrderRepository {
         }
     }
 
-    public PaymentMethod convertIntToCategoryID(int paymentMethod) {
-        switch (paymentMethod) {
-            case 1:
-                return PaymentMethod.CASH;
-            case 2:
-                return PaymentMethod.CREDIT_CARD;
-            case 3:
-                return PaymentMethod.WIRE_TRANSFER;
-            default:
-                return null;
-        }
-    }
     public void saveOrderToDB(Order order) {
 
             try(PreparedStatement statement = this.connection.prepareStatement("INSERT INTO ORDERS(ORDER_ID,CUSTOMER_ID,PAYMENT_METHOD_ID,PENDING,COST) VALUES(NULL,?,?,NULL,?)")) {
@@ -47,11 +36,10 @@ public class OrderRepository {
                 int paymentMethod = convertPaymentMethodToInt(order.getPaymentMethod());
                 statement.setInt(2, paymentMethod);
                 statement.setBigDecimal(3, order.getCost());
-                //pending
                 statement.executeUpdate();
             }
             catch (SQLException throwable) {
-                throwable.printStackTrace();
+                logger.error("Error: {}",throwable.toString());
             }
     }
 

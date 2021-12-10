@@ -26,14 +26,14 @@ public class ProductService implements ProductServiceInterface {
 
         logger.info("Enter product name ");
         product.setProductName(in.nextLine());
-        logger.info("Enter product price with this format 'xxx.xx'");
+        logger.info("Enter product price with this format 'xxx,xx'");
         product.setPrice(in.nextBigDecimal());      //it wants a "," not a "." MAYBE?!!?!?!
         logger.info("Enter product stock ");
         product.setStock(in.nextInt());
         productRepository.insertProductToDb(product);
         //add this product to db
         //this.productRepository.insertProductToDb(product);
-        logger.info("New product name: {} , with price {} € and stock {} ", product.getProductName(),product.getPrice(),product.getStock());
+        logger.info("New product name: {} , with price {}€ and stock {} ", product.getProductName(),product.getPrice(),product.getStock());
     }
 
     public void editProduct() throws SQLException {
@@ -47,7 +47,7 @@ public class ProductService implements ProductServiceInterface {
 
         logger.info("Enter product name ");
         product.setProductName(in.nextLine());
-        logger.info("Enter product price with this format 'xxx.xx'");  //edit product
+        logger.info("Enter product price with this format 'xxx,xx'");  //edit product
         product.setPrice(in.nextBigDecimal());      //it wants a "," not a "." MAYBE?!!?!?!
         logger.info("Enter product stock ");
         product.setStock(in.nextInt());

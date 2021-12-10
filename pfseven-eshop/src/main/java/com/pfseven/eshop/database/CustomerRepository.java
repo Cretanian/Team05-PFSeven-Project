@@ -3,10 +3,14 @@ package com.pfseven.eshop.database;
 import com.pfseven.eshop.classinterface.CustomerRepositoryInterface;
 import com.pfseven.eshop.model.CategoryID;
 import com.pfseven.eshop.model.Customer;
+import com.pfseven.eshop.service.CustomerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 
 public class CustomerRepository implements CustomerRepositoryInterface {
-
+    private static final Logger logger = LoggerFactory.getLogger(CustomerRepository.class);
     private Connection connection;
 
     public CustomerRepository(Connection connection){
@@ -50,7 +54,7 @@ public class CustomerRepository implements CustomerRepositoryInterface {
             statement.executeUpdate();
         }
         catch (SQLException throwable) {
-            throwable.printStackTrace();
+           logger.error("Error: {}",throwable.toString());
         }
     }
 
@@ -71,7 +75,7 @@ public class CustomerRepository implements CustomerRepositoryInterface {
             existedCustomer.setCustomerID(customerID);
         }
         catch (SQLException throwable) {
-            throwable.printStackTrace();
+            logger.error("Error: {}",throwable.toString());
             existedCustomer.setCustomerID(-1);
         }
         return existedCustomer;
@@ -92,11 +96,9 @@ public class CustomerRepository implements CustomerRepositoryInterface {
 
             CategoryID categoryID = convertIntToCategoryID(resultSet.getInt("category_id"));
             existedCustomer.setCategoryID(categoryID);
-
-            System.out.println("customer's id is " + existedCustomer.getCustomerID());
         }
         catch (SQLException throwable) {
-            throwable.printStackTrace();
+            logger.error("Error: {}",throwable.toString());
             existedCustomer.setCustomerID(-1);
         }
         return existedCustomer;
@@ -111,7 +113,7 @@ public class CustomerRepository implements CustomerRepositoryInterface {
             id = resultSet.getInt(1);
         }
         catch (SQLException throwable) {
-            throwable.printStackTrace();
+            logger.error("Error: {}",throwable.toString());
             id = -1;
         }
         return id;

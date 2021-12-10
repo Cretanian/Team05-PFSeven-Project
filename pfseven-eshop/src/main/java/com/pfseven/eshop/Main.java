@@ -187,7 +187,7 @@ public class Main {
         logger.info("Select category:");
         category = scannerInput.nextLine();
 
-        reportsService.getNumberAndCostOfPurchasesForCategory(category);
+        reportsService.getNumberAndCostOfPurchasesForCustomerCategory();
     }
 
     private static void getThirdReport (ReportsService reportsService) throws SQLException {
@@ -197,14 +197,11 @@ public class Main {
         logger.info("Select payment method:");
         paymentMethod = scannerInput.nextLine();
 
-        reportsService.getNumberAndCostOfPurchasesForPaymentMethod(paymentMethod);
-
+        reportsService.getNumberAndCostOfPurchasesPerPaymentMethod();
     }
 
     private static void getFourthReport (ReportsService reportsService) throws SQLException {
-
         reportsService.getGoldenCustomer();
-
     }
 
 }
