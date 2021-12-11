@@ -73,13 +73,13 @@ public class ReportsRepositoryImpl implements ReportsRepository {
         }
         catch (SQLException throwable) {
             logger.error("Error: {}",throwable.toString());
-            return BigDecimal.valueOf(-1);
+            return new BigDecimal(-1);
         }
     }
 
     //second report
     public Integer totalNumberOfOrdersPerCategory(CategoryID categoryID) {
-        try (PreparedStatement statement = this.connection.prepareStatement("SELECT COUNT(ORDERS.CUSTOMER_ID) FROM ORDERS JOIN CUSTOMER on ORDERS.CUSTOMER_ID = CUSTOMER.CUSTOMER_ID WHERE (CATEGORY_ID = ?)");) {
+        try (PreparedStatement statement = this.connection.prepareStatement("SELECT COUNT(ORDERS.CUSTOMER_ID) FROM ORDERS JOIN CUSTOMER on ORDERS.CUSTOMER_ID = CUSTOMER.CUSTOMER_ID WHERE (CATEGORY_ID = ?)")) {
 
             statement.setInt(1, convertCategoryIDToInt(categoryID));
             ResultSet resultSet = statement.executeQuery();
@@ -106,7 +106,7 @@ public class ReportsRepositoryImpl implements ReportsRepository {
     }
     //third report
     public Integer totalNumberOfOrdersPerPaymentMethod(PaymentMethod paymentMethod) {
-        try (PreparedStatement statement = this.connection.prepareStatement("SELECT COUNT(*) FROM ORDERS WHERE PAYMENT_METHOD_ID = ?");) {
+        try (PreparedStatement statement = this.connection.prepareStatement("SELECT COUNT(*) FROM ORDERS WHERE PAYMENT_METHOD_ID = ?")) {
 
             statement.setInt(1, convertPaymentMethodToInt(paymentMethod));
             ResultSet resultSet = statement.executeQuery();
@@ -120,7 +120,7 @@ public class ReportsRepositoryImpl implements ReportsRepository {
     }
 
     public BigDecimal totalCostOfOrdersPerPaymentMethod(PaymentMethod paymentMethod) {
-        try (PreparedStatement statement = this.connection.prepareStatement("SELECT SUM(COST) FROM ORDERS WHERE PAYMENT_METHOD_ID = ?");) {
+        try (PreparedStatement statement = this.connection.prepareStatement("SELECT SUM(COST) FROM ORDERS WHERE PAYMENT_METHOD_ID = ?")) {
 
             statement.setInt(1, convertPaymentMethodToInt(paymentMethod));
             ResultSet resultSet = statement.executeQuery();
@@ -151,8 +151,8 @@ public class ReportsRepositoryImpl implements ReportsRepository {
 
            resultSet = statement.executeQuery();
            resultSet.next();
-           statement.close();
            return resultSet;
+
        } catch (SQLException e) {
            logger.error("Error: {}",e.toString());
            return null;

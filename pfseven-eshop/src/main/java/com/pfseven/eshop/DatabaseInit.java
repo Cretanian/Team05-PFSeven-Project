@@ -104,7 +104,6 @@ public class DatabaseInit {
                    " order_ID INTEGER not NULL AUTO_INCREMENT," +
                    " customer_ID INTEGER not NULL," +
                    " payment_method_id INTEGER not NULL," +
-                   " pending varchar(5)," +
                    " cost NUMERIC(6,2)," +
                    " PRIMARY KEY (order_ID)," +
                    " CONSTRAINT FK_CUSTOMER FOREIGN KEY(customer_ID) REFERENCES Customer(customer_ID)" +
@@ -146,10 +145,11 @@ public class DatabaseInit {
 
       statement.executeUpdate(sql);
 
-       sql = "INSERT INTO ORDERS (ORDER_ID, CUSTOMER_ID, PAYMENT_METHOD_ID, PENDING, COST)" +
-              "VALUES (NULL, '2', '2', 'NO', 100.30), (NULL, '2', '3', 'NO', 43.21), (NULL, '2', '1', 'YES', 32.90), " +
-              "(NULL, '3', '2', 'NO', 34.60), (NULL, '3', '1', 'YES', 45.99), (NULL, '1', '3', 'NO', 140.50)," +
-              "(NULL, '1', '1', 'NO', 257.50), (NULL, '1', '2', 'NO', 300.20), (NULL, '1', '3', 'YES', 32.30);";
+       sql = "INSERT INTO ORDERS (ORDER_ID, CUSTOMER_ID, PAYMENT_METHOD_ID, COST)" +
+              "VALUES (NULL, '2', '2', 100.30), (NULL, '2', '3', 43.21), (NULL, '2', '1', 32.90), " +
+              "(NULL, '3', '2', 34.60), (NULL, '3', '1', 45.99), (NULL, '1', '3', 140.50)," +
+              "(NULL, '1', '1',  257.50), (NULL, '1', '2', 300.20), (NULL, '1', '3', 32.30)," +
+               "(NULL, '4', '2',  52.38);";
 
        statement.executeUpdate(sql);
 

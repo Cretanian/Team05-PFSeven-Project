@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ReportsServiceImpl {
+public class ReportsServiceImpl implements ReportsService {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
     private ReportsRepositoryImpl reportsRepositoryImpl;
@@ -23,7 +23,8 @@ public class ReportsServiceImpl {
 
         int number = reportsRepositoryImpl.totalNumberOfOrdersForCustomer(customerID);
         BigDecimal cost = reportsRepositoryImpl.totalCostOfPurchases(customerID);
-        if(number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
+
+        if(cost != null && number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
             logger.info("customer {} number of purchases {} with total cost of {}$", customerID, number, cost);
         }
     }
@@ -33,21 +34,21 @@ public class ReportsServiceImpl {
         int number = reportsRepositoryImpl.totalNumberOfOrdersPerCategory(CategoryID.B2C);
         BigDecimal cost = reportsRepositoryImpl.totalCostOfOrdersPerCategory(CategoryID.B2C);
 
-        if(number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
+        if(cost != null && number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
             logger.info("Total number of purchases is {} with {} cost for the B2C", number, cost);
         }
 
         number = reportsRepositoryImpl.totalNumberOfOrdersPerCategory(CategoryID.B2B);
         cost = reportsRepositoryImpl.totalCostOfOrdersPerCategory(CategoryID.B2B);
 
-        if(number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
+        if(cost != null && number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
             logger.info("Total number of purchases is {} with {} cost for the B2B", number, cost);
         }
 
         number = reportsRepositoryImpl.totalNumberOfOrdersPerCategory(CategoryID.B2G);
         cost = reportsRepositoryImpl.totalCostOfOrdersPerCategory(CategoryID.B2G);
 
-        if(number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
+        if(cost != null && number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
             logger.info("Total number of purchases is {} with {} cost for the B2G", number, cost);
         }
     }
@@ -56,19 +57,19 @@ public class ReportsServiceImpl {
     public void getNumberAndCostOfPurchasesPerPaymentMethod()  {
         int number = reportsRepositoryImpl.totalNumberOfOrdersPerPaymentMethod(PaymentMethod.CASH);
         BigDecimal cost = reportsRepositoryImpl.totalCostOfOrdersPerPaymentMethod(PaymentMethod.CASH);
-        if(number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
+        if(cost != null && number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
             logger.info("Total number of purchases using CASH is {} with {} cost ", number, cost);
         }
 
         number = reportsRepositoryImpl.totalNumberOfOrdersPerPaymentMethod(PaymentMethod.CREDIT_CARD);
         cost = reportsRepositoryImpl.totalCostOfOrdersPerPaymentMethod(PaymentMethod.CREDIT_CARD);
-        if(number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
+        if(cost != null && number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
             logger.info("Total number of purchases using CREDIT_CARD is {} with {} cost ", number, cost);
         }
 
         number = reportsRepositoryImpl.totalNumberOfOrdersPerPaymentMethod(PaymentMethod.WIRE_TRANSFER);
         cost = reportsRepositoryImpl.totalCostOfOrdersPerPaymentMethod(PaymentMethod.WIRE_TRANSFER);
-        if(number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
+        if(cost != null && number != -1 && !cost.equals(BigDecimal.valueOf(-1))) {
             logger.info("Total number of purchases using WIRE_TRANSFER is {} with {} cost ", number, cost);
         }
     }
@@ -92,4 +93,5 @@ public class ReportsServiceImpl {
             logger.error("Error: {}",e.toString());
         }
     }
+
 }

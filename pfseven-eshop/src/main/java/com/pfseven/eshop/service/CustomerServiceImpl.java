@@ -71,7 +71,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         logger.info("A) Get customer from customer ID  B) Get customer from name");
 
-        if(scannerInput.nextLine().toLowerCase().equals("a")){
+        String inputHelper = scannerInput.nextLine();
+        if(inputHelper.equalsIgnoreCase("a")){
             logger.info("Enter ID");
             try {
                 return scannerInput.nextInt();
@@ -80,7 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
                 return -1;
             }
         }
-        else   //It requires else if, because if we do not place "A", it tells you to choose the customer regardless.
+        else if(inputHelper.equalsIgnoreCase("b"))  //It requires else if, because if we do not place "A", it tells you to choose the customer regardless.
         {
             logger.info("Enter first name");
             String userFirstname = scannerInput.nextLine();
@@ -91,6 +92,9 @@ public class CustomerServiceImpl implements CustomerService {
             customerID = customerRepositoryImpl.getCustomerFromName(userFirstname, userLastname).getCustomerID();
 
             return customerID;
+        } else {
+            logger.info("Wrong input!");
+            return -1;
         }
     }
 

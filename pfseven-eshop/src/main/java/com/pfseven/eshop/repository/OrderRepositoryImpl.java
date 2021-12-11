@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class OrderRepositoryImpl implements OrderRepository {
@@ -41,6 +42,21 @@ public class OrderRepositoryImpl implements OrderRepository {
             catch (SQLException throwable) {
                 logger.error("Error: {}",throwable.toString());
             }
+    }
+
+    public int findMaxID() {
+        int id;
+
+        try(PreparedStatement statement = this.connection.prepareStatement("SELECT MAX(ORDER_ID) FROM ORDERS")) {
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            id = resultSet.getInt(1);
+        }
+        catch (SQLException throwable) {
+            logger.error("Error: {}",throwable.toString());
+            id = -1;
+        }
+        return id;
     }
 
 }

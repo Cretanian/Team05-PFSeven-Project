@@ -73,7 +73,7 @@ public class Main {
         String userInput = "";
 
 
-        while (!userInput.toLowerCase().equals("c")) {
+        while (!userInput.equalsIgnoreCase("c")) {
             logger.info("A) Add new product  B) Edit existing product C) Back");
             userInput = scannerInput.nextLine();
             switch (userInput.toLowerCase()) {
@@ -96,7 +96,7 @@ public class Main {
     }
     private static Integer getCustomerID(CustomerServiceImpl customerServiceImpl) {
         Scanner scannerInput = new Scanner(System.in);
-        String userInput = "";
+        String userInput;
         //Change name of customerID!!
         Integer customerID = -1;
 
@@ -127,8 +127,6 @@ public class Main {
 
         Integer customerID = getCustomerID(customerServiceImpl);
 
-        //if (newOrder.getPending() = )
-
         if (customerID > 0) {
             newOrder.setCustomerID(customerID);
             orderServiceImpl.newOrderInput(newOrder,customerID);
@@ -144,7 +142,7 @@ public class Main {
                         "  B) Get total number and cost of purchases per customer category" +
                         "  C) Get total number and cost of purchases per payment method" +
                         "  D) Get the customer(s) who purchased the most expensive product and how many times" +
-                        "  E) Terminate");
+                        "  E) Back!");
 
                 userInput = scannerInput.nextLine();
                 switch (userInput.toLowerCase()) {                            //check statement later
@@ -168,29 +166,13 @@ public class Main {
             }
     }
     private static void getFirstReport (CustomerServiceImpl customerServiceImpl, ReportsServiceImpl reportsServiceImpl) {
-
         Integer custID = customerServiceImpl.getCustomerIDfromDB();
-
         reportsServiceImpl.getNumberAndCostOfPurchasesForCustomer(custID);
-
-        //Integer customerID = getCustomerID(customerService);
     }
     private static void getSecondReport (ReportsServiceImpl reportsServiceImpl) {
-
-        Scanner scannerInput = new Scanner(System.in);
-        String category = null;
-        logger.info("Select category:");
-        category = scannerInput.nextLine();
-
         reportsServiceImpl.getNumberAndCostOfPurchasesForCustomerCategory();
     }
     private static void getThirdReport (ReportsServiceImpl reportsServiceImpl) {
-
-        Scanner scannerInput = new Scanner(System.in);
-        String paymentMethod = null;
-        logger.info("Select payment method:");
-        paymentMethod = scannerInput.nextLine();
-
         reportsServiceImpl.getNumberAndCostOfPurchasesPerPaymentMethod();
     }
     private static void getFourthReport (ReportsServiceImpl reportsServiceImpl) {

@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
         ArrayList <OrderItem> orderList = new ArrayList<>();
         Scanner scannerInput = new Scanner(System.in);
 
-        Integer totalProduct = -1;
+        Integer totalProduct;
         String userInput;
 
         order.setCustomerID(customerID);
@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
                 Product product = new Product();
                 logger.info("A) Get product from product ID  B) Get product from name");
                 userInput = scannerInput.nextLine();
-                if(userInput.toLowerCase().equals("a")) {
+                if(userInput.equalsIgnoreCase("a")) {
                     logger.info("Enter product ID");
                     product.setProductID(scannerInput.nextInt());
 
@@ -60,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
                         continue;
                     }
                 }
-                else if (userInput.toLowerCase().equals("a")) {
+                else if (userInput.equalsIgnoreCase("b")) {
                     logger.info("Enter product name");
                     String productName = scannerInput.nextLine();
                     //get rest from DB
@@ -78,11 +78,12 @@ public class OrderServiceImpl implements OrderService {
                 {
                     orderItem.setTotal(totalProduct);
                     orderItem.setProductID(product.getProductID());
+
+                    orderItem.setOrderID(orderRepositoryImpl.findMaxID() + 1);
                     product.setStock(product.getStock() - totalProduct);
                     productRepositoryImpl.updateProductToDb(product);
-                    orderItemRepositoryImpl.saveOrderItemToDB(orderItem);
-                    orderList.add(orderItem);
 
+                    orderList.add(orderItem);
                     orderCost = orderCost.add(product.getPrice().multiply(BigDecimal.valueOf(totalProduct)));
                 }
                 else
@@ -95,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
                 logger.info("A) Add more products B) Place order!");
                 userInput = scannerInput.nextLine();
 
-                if(userInput.toLowerCase().equals("b"))
+                if(userInput.equalsIgnoreCase("b"))
                     break;
             }
             catch (InputMismatchException throwable) {
@@ -141,6 +142,11 @@ public class OrderServiceImpl implements OrderService {
             logger.info("Your discount is: {}%, so the final order cost is: {}€", totalDiscount,orderCost);
             order.setCost(orderCost);
             orderRepositoryImpl.saveOrderToDB(order);
+
+            for (OrderItem orderItem : orderList) {
+                orderItemRepositoryImpl.saveOrderItemToDB(orderItem);
+            }
+
             logger.info("Order {}", order);
         }
         else {
