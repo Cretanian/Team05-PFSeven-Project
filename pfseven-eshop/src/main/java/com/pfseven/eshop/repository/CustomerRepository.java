@@ -1,11 +1,11 @@
-package com.pfseven.eshop.classinterface;
+package com.pfseven.eshop.repository;
 
 import com.pfseven.eshop.model.CategoryID;
 import com.pfseven.eshop.model.Customer;
 
 import java.sql.SQLException;
 
-public interface CustomerRepositoryInterface {
+public interface CustomerRepository {
 
      /* This method gets a CategoryID and returns an integer
       * based on the provided value. This integer is then stored

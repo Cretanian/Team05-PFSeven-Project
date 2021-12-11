@@ -1,6 +1,5 @@
-package com.pfseven.eshop.database;
+package com.pfseven.eshop.repository;
 
-import com.pfseven.eshop.classinterface.CustomerRepositoryInterface;
 import com.pfseven.eshop.model.CategoryID;
 import com.pfseven.eshop.model.Customer;
 import org.slf4j.Logger;
@@ -8,11 +7,11 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
-public class CustomerRepository implements CustomerRepositoryInterface {
-    private static final Logger logger = LoggerFactory.getLogger(CustomerRepository.class);
+public class CustomerRepositoryImpl implements CustomerRepository {
+    private static final Logger logger = LoggerFactory.getLogger(CustomerRepositoryImpl.class);
     private Connection connection;
 
-    public CustomerRepository(Connection connection){
+    public CustomerRepositoryImpl(Connection connection){
         this.connection = connection;
     }
 

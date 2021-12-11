@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-//@ToString(callSuper = false)
-
 public class Customer {
     private Integer customerID;
     private String firstName;

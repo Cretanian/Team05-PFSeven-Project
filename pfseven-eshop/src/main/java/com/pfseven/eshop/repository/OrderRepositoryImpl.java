@@ -1,4 +1,4 @@
-package com.pfseven.eshop.database;
+package com.pfseven.eshop.repository;
 
 import com.pfseven.eshop.model.Order;
 import com.pfseven.eshop.model.PaymentMethod;
@@ -9,11 +9,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class OrderRepository {
-    private static final Logger logger = LoggerFactory.getLogger(OrderRepository.class);
+public class OrderRepositoryImpl implements OrderRepository {
+    private static final Logger logger = LoggerFactory.getLogger(OrderRepositoryImpl.class);
     private Connection connection;
 
-    public OrderRepository(Connection connection) {
+    public OrderRepositoryImpl(Connection connection) {
         this.connection = connection;
     }
     public int convertPaymentMethodToInt(PaymentMethod paymentMethod) {

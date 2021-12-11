@@ -1,42 +1,37 @@
 package com.pfseven.eshop;
 
-import com.pfseven.eshop.database.*;
-import com.pfseven.eshop.model.CategoryID;
-import com.pfseven.eshop.model.Customer;
+import com.pfseven.eshop.repository.*;
 import com.pfseven.eshop.model.Order;
 import com.pfseven.eshop.service.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
-    private static final Logger logger = LoggerFactory.getLogger(DatabasePF7Project.class);
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseInit.class);
 
-    public static void main(String[] args) throws SQLException {
-       DatabasePF7Project controller = new DatabasePF7Project();
+    public static void main(String[] args) {
+       DatabaseInit controller = new DatabaseInit();
        controller.startServer();
        controller.createDBConnection();
        controller.initializeDB();
 
+       ProductRepositoryImpl productRepositoryImpl = new ProductRepositoryImpl(controller.getDBConnection());
+       ProductServiceImpl productServiceImpl = new ProductServiceImpl(productRepositoryImpl);
 
-        ProductRepository productRepository = new ProductRepository(controller.getDBConnection());
-        ProductService productService = new ProductService(productRepository);
-
-        CustomerRepository customerRepository = new CustomerRepository(controller.getDBConnection());
-        CustomerService customerService = new CustomerService(customerRepository);
-
-
-        OrderItemRepository orderItemRepository = new OrderItemRepository(controller.getDBConnection());
-        OrderRepository orderRepository = new OrderRepository(controller.getDBConnection());
-        OrderService newOrderInput = new OrderService(orderRepository, productRepository, customerRepository,orderItemRepository);
+       CustomerRepositoryImpl customerRepositoryImpl = new CustomerRepositoryImpl(controller.getDBConnection());
+       CustomerServiceImpl customerServiceImpl = new CustomerServiceImpl(customerRepositoryImpl);
 
 
-        ReportsRepository reportsRepository = new ReportsRepository(controller.getDBConnection());
-        ReportsService reportsService = new ReportsService(reportsRepository);
+       OrderItemRepositoryImpl orderItemRepositoryImpl = new OrderItemRepositoryImpl(controller.getDBConnection());
+       OrderRepositoryImpl orderRepositoryImpl = new OrderRepositoryImpl(controller.getDBConnection());
+       OrderServiceImpl newOrderInput = new OrderServiceImpl(orderRepositoryImpl, productRepositoryImpl, customerRepositoryImpl, orderItemRepositoryImpl);
+
+
+       ReportsRepositoryImpl reportsRepositoryImpl = new ReportsRepositoryImpl(controller.getDBConnection());
+       ReportsServiceImpl reportsServiceImpl = new ReportsServiceImpl(reportsRepositoryImpl);
 
         logger.info("Hello admin! Select action:");
         String userInput = "";
@@ -49,16 +44,15 @@ public class Main {
             switch (userInput) {
                 case "1":
                     logger.info("Starting order...");
-                    placeOrder(newOrderInput,customerService);
+                    placeOrder(newOrderInput, customerServiceImpl);
                     break;
                 case "2":
                     logger.info("Editing product...");
-                    chooseProductAction(productService);
+                    chooseProductAction(productServiceImpl);
                     break;
                 case "3":
                     logger.info("Getting reports...");
-                    getReports(reportsService,customerService);
-                    //method
+                    getReports(reportsServiceImpl, customerServiceImpl);
                     break;
                 case "4":
                     logger.info("Terminated!");
@@ -68,13 +62,13 @@ public class Main {
             }
         }
 
-
         scannerInput.close();
         controller.closeDBConnection(controller.getDBConnection());
         controller.closeServer();
     }
 
-    private static void chooseProductAction(ProductService productService) throws SQLException {
+
+    private static void chooseProductAction(ProductServiceImpl productServiceImpl) {
         Scanner scannerInput = new Scanner(System.in);
         String userInput = "";
 
@@ -85,11 +79,11 @@ public class Main {
             switch (userInput.toLowerCase()) {
                 case "a":
                 case "A":
-                    productService.newProductInput();
+                    productServiceImpl.newProductInput();
                     break;
                 case "b":
                 case "B":
-                    productService.editProduct();
+                    productServiceImpl.editProduct();
                     break;
                 case "c":
                 case "C":
@@ -100,8 +94,7 @@ public class Main {
             }
         }
     }
-
-    private static Integer getCustomerID(CustomerService customerService) throws SQLException {
+    private static Integer getCustomerID(CustomerServiceImpl customerServiceImpl) {
         Scanner scannerInput = new Scanner(System.in);
         String userInput = "";
         //Change name of customerID!!
@@ -113,10 +106,10 @@ public class Main {
             userInput = scannerInput.nextLine();
             switch (userInput.toLowerCase()) {
                 case "a":
-                    customerID = customerService.newCustomerInput();
+                    customerID = customerServiceImpl.newCustomerInput();
                     break;
                 case "b":
-                    customerID = customerService.getCustomerIDfromDB();
+                    customerID = customerServiceImpl.getCustomerIDfromDB();
                     break;
                 case "c":
                     logger.info("...");
@@ -128,27 +121,25 @@ public class Main {
         }
         return customerID;
     }
-
-    private static void placeOrder(OrderService orderService, CustomerService customerService) throws SQLException {
+    private static void placeOrder(OrderServiceImpl orderServiceImpl, CustomerServiceImpl customerServiceImpl) {
 
         Order newOrder = new Order();
 
-        Integer customerID = getCustomerID(customerService);
+        Integer customerID = getCustomerID(customerServiceImpl);
 
         //if (newOrder.getPending() = )
 
         if (customerID > 0) {
             newOrder.setCustomerID(customerID);
-            orderService.newOrderInput(newOrder,customerID);
+            orderServiceImpl.newOrderInput(newOrder,customerID);
         }
     }
-
-    private static void getReports (ReportsService reportsService, CustomerService customerService) throws SQLException {
+    private static void getReports (ReportsServiceImpl reportsServiceImpl, CustomerServiceImpl customerServiceImpl)  {
 
             Scanner scannerInput = new Scanner(System.in);
             String userInput = "";
 
-            while (!userInput.toLowerCase().equals("e")) {
+            while (!userInput.equalsIgnoreCase("e")) {
                 logger.info("A) Get total number and cost of purchases for a particular customer" +
                         "  B) Get total number and cost of purchases per customer category" +
                         "  C) Get total number and cost of purchases per payment method" +
@@ -158,16 +149,16 @@ public class Main {
                 userInput = scannerInput.nextLine();
                 switch (userInput.toLowerCase()) {                            //check statement later
                     case "a":
-                        getFirstReport(customerService,reportsService);
+                        getFirstReport(customerServiceImpl, reportsServiceImpl);
                         break;
                     case "b":
-                        getSecondReport(reportsService);
+                        getSecondReport(reportsServiceImpl);
                         break;
                     case "c":
-                        getThirdReport (reportsService);
+                        getThirdReport (reportsServiceImpl);
                         break;
                     case "d":
-                        getFourthReport (reportsService);
+                        getFourthReport (reportsServiceImpl);
                         break;
                     case "e":
                         break;
@@ -176,37 +167,34 @@ public class Main {
                 }
             }
     }
-    private static void getFirstReport (CustomerService customerService, ReportsService reportsService) throws SQLException {
+    private static void getFirstReport (CustomerServiceImpl customerServiceImpl, ReportsServiceImpl reportsServiceImpl) {
 
-        Integer custID = customerService.getCustomerIDfromDB();
+        Integer custID = customerServiceImpl.getCustomerIDfromDB();
 
-        reportsService.getNumberAndCostOfPurchasesForCustomer(custID);
+        reportsServiceImpl.getNumberAndCostOfPurchasesForCustomer(custID);
 
         //Integer customerID = getCustomerID(customerService);
     }
-
-    private static void getSecondReport (ReportsService reportsService) throws SQLException {
+    private static void getSecondReport (ReportsServiceImpl reportsServiceImpl) {
 
         Scanner scannerInput = new Scanner(System.in);
         String category = null;
         logger.info("Select category:");
         category = scannerInput.nextLine();
 
-        reportsService.getNumberAndCostOfPurchasesForCustomerCategory();
+        reportsServiceImpl.getNumberAndCostOfPurchasesForCustomerCategory();
     }
-
-    private static void getThirdReport (ReportsService reportsService) throws SQLException {
+    private static void getThirdReport (ReportsServiceImpl reportsServiceImpl) {
 
         Scanner scannerInput = new Scanner(System.in);
         String paymentMethod = null;
         logger.info("Select payment method:");
         paymentMethod = scannerInput.nextLine();
 
-        reportsService.getNumberAndCostOfPurchasesPerPaymentMethod();
+        reportsServiceImpl.getNumberAndCostOfPurchasesPerPaymentMethod();
     }
-
-    private static void getFourthReport (ReportsService reportsService) throws SQLException {
-        reportsService.getGoldenCustomer();
+    private static void getFourthReport (ReportsServiceImpl reportsServiceImpl) {
+        reportsServiceImpl.getGoldenCustomer();
     }
 
 }

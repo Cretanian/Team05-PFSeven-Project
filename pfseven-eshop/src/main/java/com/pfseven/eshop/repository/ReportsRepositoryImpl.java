@@ -1,4 +1,4 @@
-package com.pfseven.eshop.database;
+package com.pfseven.eshop.repository;
 
 import com.pfseven.eshop.model.CategoryID;
 import com.pfseven.eshop.model.PaymentMethod;
@@ -11,12 +11,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ReportsRepository {
-    private static final Logger logger = LoggerFactory.getLogger(ReportsRepository.class);
+public class ReportsRepositoryImpl implements ReportsRepository {
+    private static final Logger logger = LoggerFactory.getLogger(ReportsRepositoryImpl.class);
     private Connection connection;
 
-
-    public ReportsRepository(Connection connection){
+    public ReportsRepositoryImpl(Connection connection){
         this.connection = connection;
     }
 
@@ -135,23 +134,28 @@ public class ReportsRepository {
     }
 
    //fourth report
-   public ResultSet GoldenCustomer() throws SQLException {
-       PreparedStatement statement = this.connection.prepareStatement
-               ("SELECT MAX(PRODUCT.PRICE)" +
-                       "FROM PRODUCT JOIN ProductOrder ON PRODUCTORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID  ");
+   public ResultSet GoldenCustomer() {
+       try {
+           PreparedStatement statement = this.connection.prepareStatement ("SELECT MAX(PRODUCT.PRICE)" +
+                   "FROM PRODUCT JOIN ProductOrder ON PRODUCTORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID  ");
 
-       ResultSet resultSet = statement.executeQuery();
-       resultSet.next();
+           ResultSet resultSet = statement.executeQuery();
+           resultSet.next();
 
-       statement = this.connection.prepareStatement
-                    ("SELECT CUSTOMER.CUSTOMER_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME, PRODUCT.PRICE, PRODUCTORDER.QUANTITY " +
-                            "FROM CUSTOMER JOIN ORDERS ON CUSTOMER.CUSTOMER_ID = ORDERS.CUSTOMER_ID  " +
-                            "JOIN PRODUCTORDER ON ORDERS.ORDER_ID = PRODUCTORDER.ORDER_ID " +
-                            "JOIN  PRODUCT ON PRODUCTORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID  " +
-                            "WHERE  PRODUCT.PRICE = " + resultSet.getString(1));
+           statement = this.connection.prepareStatement
+                   ("SELECT CUSTOMER.CUSTOMER_ID, CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME, PRODUCT.PRICE, PRODUCTORDER.QUANTITY " +
+                           "FROM CUSTOMER JOIN ORDERS ON CUSTOMER.CUSTOMER_ID = ORDERS.CUSTOMER_ID  " +
+                           "JOIN PRODUCTORDER ON ORDERS.ORDER_ID = PRODUCTORDER.ORDER_ID " +
+                           "JOIN  PRODUCT ON PRODUCTORDER.PRODUCT_ID = PRODUCT.PRODUCT_ID  " +
+                           "WHERE  PRODUCT.PRICE = " + resultSet.getString(1));
 
-       resultSet = statement.executeQuery();
-       resultSet.next();
-       return resultSet;
+           resultSet = statement.executeQuery();
+           resultSet.next();
+           statement.close();
+           return resultSet;
+       } catch (SQLException e) {
+           logger.error("Error: {}",e.toString());
+           return null;
+       }
    }
 }

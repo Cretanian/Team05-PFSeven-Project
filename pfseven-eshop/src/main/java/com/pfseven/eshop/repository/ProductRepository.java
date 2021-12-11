@@ -1,10 +1,10 @@
-package com.pfseven.eshop.classinterface;
+package com.pfseven.eshop.repository;
 
 import com.pfseven.eshop.model.Product;
 
 import java.sql.SQLException;
 
-public interface ProductRepositoryInterface {
+public interface ProductRepository {
 
      /* This method uses product_ID to request the database.
      * Create and returns the requested Product. */

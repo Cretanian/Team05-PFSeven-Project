@@ -1,6 +1,5 @@
-package com.pfseven.eshop.database;
+package com.pfseven.eshop.repository;
 
-import com.pfseven.eshop.classinterface.OrderItemRepositoryInterface;
 import com.pfseven.eshop.model.OrderItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +8,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class OrderItemRepository implements OrderItemRepositoryInterface {
+public class OrderItemRepositoryImpl implements OrderItemRepository {
     private Connection connection;
-    private static final Logger logger = LoggerFactory.getLogger(OrderItemRepository.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderItemRepositoryImpl.class);
 
-    public OrderItemRepository (Connection connection){
+    public OrderItemRepositoryImpl(Connection connection){
         this.connection = connection;
     }
 

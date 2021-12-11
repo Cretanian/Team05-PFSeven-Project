@@ -1,18 +1,17 @@
-package com.pfseven.eshop.database;
+package com.pfseven.eshop.repository;
 
-import com.pfseven.eshop.classinterface.ProductRepositoryInterface;
 import com.pfseven.eshop.model.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
-public class ProductRepository implements ProductRepositoryInterface {
-   private static final Logger logger = LoggerFactory.getLogger(ProductRepository.class);
+public class ProductRepositoryImpl implements ProductRepository {
+   private static final Logger logger = LoggerFactory.getLogger(ProductRepositoryImpl.class);
    private Connection connection;
 
 
-   public ProductRepository(Connection connection){
+   public ProductRepositoryImpl(Connection connection){
       this.connection = connection;
    }
 
