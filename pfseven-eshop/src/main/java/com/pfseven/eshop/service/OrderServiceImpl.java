@@ -65,6 +65,11 @@ public class OrderServiceImpl implements OrderService {
                     String productName = scannerInput.nextLine();
                     //get rest from DB
                     product  = productRepositoryImpl.getProductFromName(productName);
+                    if (product.getProductID() == -1) {
+                        logger.info("There is no such product! Try again!");
+//                        scannerInput.nextLine();
+                        continue;
+                    }
                 }
                 else {
                     logger.info("Invalid input! Try again!");
@@ -125,7 +130,7 @@ public class OrderServiceImpl implements OrderService {
                     order.setPaymentMethod(PaymentMethod.WIRE_TRANSFER);
                     break label;
             }
-            logger.info("WRONG ... Try again...");
+            logger.info("Invalid input! Try again!");
         }while(true);
 
 
@@ -146,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
             for (OrderItem orderItem : orderList) {
                 orderItemRepositoryImpl.saveOrderItemToDB(orderItem);
             }
-
+            order.setOrderID(orderRepositoryImpl.findMaxID());
             logger.info("Order {}", order);
         }
         else {

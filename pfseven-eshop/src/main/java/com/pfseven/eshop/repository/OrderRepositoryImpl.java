@@ -32,7 +32,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     public void saveOrderToDB(Order order) {
 
-            try(PreparedStatement statement = this.connection.prepareStatement("INSERT INTO ORDERS(ORDER_ID,CUSTOMER_ID,PAYMENT_METHOD_ID,PENDING,COST) VALUES(NULL,?,?,NULL,?)")) {
+            try(PreparedStatement statement = this.connection.prepareStatement("INSERT INTO ORDERS(ORDER_ID,CUSTOMER_ID,PAYMENT_METHOD_ID,COST) VALUES(NULL,?,?,?)")) {
                 statement.setInt(1, order.getCustomerID());
                 int paymentMethod = convertPaymentMethodToInt(order.getPaymentMethod());
                 statement.setInt(2, paymentMethod);
