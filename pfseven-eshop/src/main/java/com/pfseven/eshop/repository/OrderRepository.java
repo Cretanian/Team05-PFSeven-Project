@@ -17,4 +17,7 @@ public interface OrderRepository {
       * the created order variable that is passed */
      void saveOrderToDB(Order order) throws SQLException;
 
+
+     public int findMaxID();
+
 }
